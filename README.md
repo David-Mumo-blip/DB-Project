@@ -17,5 +17,5 @@
 
 ## Rules
 - Never commit config.py (it has your own password)
-- Only Leon and <you> edit app.py and routes/
+- Only Leon and I edit app.py and routes/
 - Tell the group chat before changing schema.sql or API.md

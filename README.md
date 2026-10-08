@@ -11,7 +11,7 @@
 ## Every day
 1. Activate the venv
 2. git checkout main, then git pull
-3. Switch to your branch: git checkout <your-branch>, then git merge main
+3. Switch to your branch: git checkout (your-branch), then git merge main
 4. Work, commit small and often
 5. git push, then open a pull request. A teammate reviews before it merges into main
 

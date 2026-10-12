@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Login - Hunger Hunt</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: antiquewhite;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 6%;
+            background-color: antiquewhite;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.813);
+        }
+
+        .back-home {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        main {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 17px;
+            margin-bottom: 40px;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .login-card {
+            background-color: white;
+            width: 320px;
+            padding: 35px 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 12px;
+        }
+
+        .login-card p {
+            color: #666;
+            line-height: 1.6;
+            min-height: 50px;
+        }
+
+        .login-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 13px 25px;
+            background-color: #00695c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #004d40;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .login-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Hunger Hunt</div>
+        <a href="index.html" class="back-home">Back to Home</a>
+    </header>
+
+    <main>
+        <h1>Welcome to Hunger Hunt!</h1>
+
+        <p class="description">
+            How would you like to log in?
+            Choose an apppropriate account type.
+        </p>
+
+        <div class="login-options">
+
+            <div class="login-card">
+                <div class="icon"></div>
+
+                <h2>Student</h2>
+
+                <p>
+                    Discover delicious meals, explore food vendors
+                    and find your favorite food around Siwaka.
+                </p>
+
+                <a href="student-login.html" class="login-button">
+                    Login as Student
+                </a>
+            </div>
+
+            <div class="login-card">
+                <div class="icon"></div>
+
+                <h2>Vendor</h2>
+
+                <p>
+                    Manage your food business, showcase your menu
+                    and connect with hungry students.
+                </p>
+
+                <a href="vendor-login.html" class="login-button">
+                    Login as Vendor
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    
+
+</body>
+</html>
+

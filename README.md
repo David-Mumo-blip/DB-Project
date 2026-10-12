@@ -4,7 +4,7 @@
 3. Activate: Windows CMD: venv\Scripts\activate | Git Bash: source venv/Scripts/activate | Mac/Linux: source venv/bin/activate
 4. pip install -r requirements.txt
 5. Copy config.example.py to config.py and put YOUR MySQL password in it
-6. In MySQL Workbench, open sql/schema.sql and run it
+6. In MySQL Workbench, open sql/schema.sql and run it(Once we'll have created it)
 7. python app.py
 8. Open http://127.0.0.1:5000/api/health. It should say "connected"
 

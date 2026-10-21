@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose a Vendor | Hunger Hunt</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: antiquewhite;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 6%;
+            border-bottom: 1px solid #dfcbb4;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color:  rgba(0, 0, 0, 0.813);
+        }
+
+        .tagline {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #76685e;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #432b1d;
+            font-weight: bold;
+        }
+
+        .logout {
+            border: 1px solid #70452a;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        /* Main section */
+        .container {
+            padding: 55px 5% 70px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            color: #995b2d;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 4vw, 50px);
+            margin: 15px 0;
+        }
+
+        .intro {
+            color: #71665d;
+            font-size: 17px;
+            line-height: 1.7;
+            margin: 0 auto 40px;
+            max-width: 650px;
+        }
+
+        /* Vendor cards */
+        .vendor-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .vendor-card {
+            background-color: #fffaf2;
+            border: 1px solid #e7d8c5;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(75, 45, 20, 0.06);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .vendor-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(75, 45, 20, 0.12);
+        }
+
+        .vendor-image {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 11px;
+            background-color: #e9d7c0;
+        }
+
+        .vendor-card h2 {
+            font-size: 23px;
+            margin: 20px 0 10px;
+        }
+
+        .vendor-card p {
+            color: #76685e;
+            line-height: 1.6;
+            min-height: 48px;
+        }
+
+        .select-btn {
+            display: block;
+            background-color: #00695c;
+            color: white;
+            padding: 13px;
+            margin-top: 20px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .select-btn:hover {
+            background-color: #00695c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #dfcbb4;
+            color: #76685e;
+            font-size: 14px;
+        }
+
+        /* Tablet */
+        @media (max-width: 1000px) {
+            .vendor-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 550px) {
+            header {
+                padding: 18px 5%;
+                gap: 12px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .tagline {
+                font-size: 12px;
+            }
+
+            .nav-links {
+                gap: 12px;
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 40px 5%;
+            }
+
+            .vendor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vendor-image {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <div class="logo">Hunger Hunt </div>
+            <div class="tagline">Discover the best food options in Siwaka or Strathmore and satisfy your cravings!</div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html" class="logout">Log Out</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        
+
+        <h1>Choose Your Vendor</h1>
+
+        <p class="intro">
+            Hungry? Choose your favourite vendor, explore their menu,
+            and find something delicious to enjoy.
+        </p>
+
+        <section class="vendor-grid">
+
+            <!-- Upesi -->
+            <article class="vendor-card">
+                <img
+                    class="vendor-image"
+                    src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80"
+                    alt="Burger and fries">
+
+                <h2>Upesi</h2>
+                <p>Quick bites and tasty meals to keep you going.</p>
+
+                <a href="upesi.html" class="select-btn">
+                    Explore Menu →
+                </a>
+            </article>
+
+            <!-- Kerinton -->
+            <article class="vendor-card">
+                <img
+                    class="vendor-image"
+                    src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80"
+                    alt="Fresh and colourful meal">
+
+                <h2>Kerinton</h2>
+                <p>Discover satisfying meals for your next break.</p>
+
+                <a href="kerinton.html" class="select-btn">
+                    Explore Menu →
+                </a>
+            </article>
+
+            <!-- Georgies -->
+            <article class="vendor-card">
+                <img
+                    class="vendor-image"
+                    src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80"
+                    alt="Freshly prepared burger">
+
+                <h2>Georgies</h2>
+                <p>Find delicious food for every craving.</p>
+
+                <a href="georgies.html" class="select-btn">
+                    Explore Menu →
+                </a>
+            </article>
+
+            <!-- Kilimanjaro -->
+            <article class="vendor-card">
+                <img
+                    class="vendor-image"
+                    src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80"
+                    alt="A hearty meal">
+
+                <h2>Kilimanjaro</h2>
+                <p>Enjoy hearty meals and satisfying flavours.</p>
+
+                <a href="kilimanjaro.html" class="select-btn">
+                    Explore Menu →
+                </a>
+            </article>
+
+        </section>
+    </main>
+
+   
+
+</body>
+</html>

@@ -12,6 +12,10 @@ INSERT INTO vendor_specific (vendor_name, vendor_product, vendor_price, stock, l
  VALUES
 ('Pate', 'Pizza', 130.00, 40, 'STC first floor'),
 ('Kilimanjaro', 'Pilau', 180.00, 30, 'STC rooftop');
+_id)
+)
+id)
+)
 
 
 CREATE TABLE vendor_overall (

@@ -25,7 +25,7 @@ app.register_blueprint(student_bp)
 
 @app.route('/')
 def index():
-    return render_template('starter.html')
+    return render_template('index.html')
 
 
 @app.route('/api/health')

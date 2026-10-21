@@ -1,3 +1,5 @@
+USE  hunger_hunt;
+
 CREATE TABLE student (
     student_id int NOT NULL PRIMARY KEY,
     first_name varchar(50) NOT NULL,

@@ -1,3 +1,5 @@
+USE hunger_hunt;
+
 CREATE TABLE orders (
     order_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     customer_id int NOT NULL,
@@ -6,8 +8,8 @@ CREATE TABLE orders (
     order_date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     total_amount decimal(10, 2) NOT NULL,
     status enum('pending', 'processing', 'completed', 'cancelled') DEFAULT 'pending',
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
-    FOREIGN KEY (vendor_id) REFERENCES vendors(vendor_id) ON DELETE CASCADE,
+    FOREIGN KEY (customer_id) REFERENCES student(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (vendor_id) REFERENCES vendor_specific(vendor_id) ON DELETE CASCADE,
     FOREIGN KEY (food_id) REFERENCES food(food_id) ON DELETE CASCADE,
     CONSTRAINT chk_total_amount CHECK ((total_amount >= 0))
 )  

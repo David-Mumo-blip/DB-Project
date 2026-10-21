@@ -1,3 +1,5 @@
+USE hunger_hunt;
+
 CREATE TABLE payments (
     payment_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     order_id int NOT NULL,

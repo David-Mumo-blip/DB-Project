@@ -1,3 +1,5 @@
+USE hunger_hunt;
+
 CREATE TABLE food (
     food_id int NOT NULL AUTO_INCREMENT,
     food_name varchar(100) NOT NULL,

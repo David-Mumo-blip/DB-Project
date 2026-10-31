@@ -136,7 +136,7 @@
 
     <header>
         <div class="logo">Hunger Hunt</div>
-        <a href="index.html" class="back-home">Back to Home</a>
+        <a href="{{ url_for('index')}}" class="back-home">Back to Home</a>
     </header>
 
     <main>
@@ -158,7 +158,7 @@
                     and find your favorite food around Siwaka.
                 </p>
 
-                <a href="Student-signup.html" class="login-button">
+                <a href="{{ url_for('auth.register_student')}}" class="login-button">
                     Create Student Account
                 </a>
             </div>
@@ -173,7 +173,7 @@
                     and connect with hungry students.
                 </p>
 
-                <a href="vendor-login.html" class="login-button">
+                <a href="{{ url_for('auth.register_vendor')}}" class="login-button">
                     Create Vendor Account
                 </a>
             </div>

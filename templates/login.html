@@ -110,7 +110,7 @@
                 <div class="logo">Hunger Hunt</div>
                 <div class="tagline">Student Portal</div>
             </div>
-            <a href="index.html" class="login">Back to Home</a>
+            <a href="{{ url_for('index')}}" class="login">Back to Home</a>
         </header>
 
         <main>
@@ -130,7 +130,7 @@
                     <button type="submit" class="btn">Login</button>
                 </form>
                 <div class="signup-text">
-                    Don't have an account? <a href="student-signup.html">Sign up</a>
+                    Don't have an account? <a href="{{ url_for('auth.register')}}">Sign up</a>
                 </div>
             </div>
         </main>

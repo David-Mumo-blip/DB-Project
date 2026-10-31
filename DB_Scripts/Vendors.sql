@@ -8,10 +8,7 @@ CREATE TABLE vendor_specific (
     location_name   VARCHAR(50)   NOT NULL
 );
 
-INSERT INTO vendor_specific (vendor_name, vendor_product, vendor_price, stock, location_name)
- VALUES
-('Pate', 'Pizza', 130.00, 40, 'STC first floor'),
-('Kilimanjaro', 'Pilau', 180.00, 30, 'STC rooftop');
+
 
 
 CREATE TABLE vendor_overall (

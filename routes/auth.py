@@ -9,6 +9,8 @@ VALID_ROLES = ('student' , 'vendor')
 
 VENDOR_HOME = {1:'vendor.pate', 2: 'vendor.kilimanjaro'}
 
+
+
 @auth_bp.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -101,6 +103,22 @@ def logout():
         
 
 
+@auth_bp.route('/register')
+def register():
+    return render_template('register.html')
 
+
+@auth_bp.route('/register/student', methods=['GET', 'POST'])
+def register_student():
+    if request.method == 'GET':
+        return render_template('student-signup.html')
+    # return create_account('student', 'student-signup.html')
+
+
+@auth_bp.route('/register/vendor', methods=['GET', 'POST'])
+def register_vendor():
+    if request.method == 'GET':
+        return render_template('Vendor-specifc.html')
+    # return create_account('vendor', 'vendor-signup.html')
 
 

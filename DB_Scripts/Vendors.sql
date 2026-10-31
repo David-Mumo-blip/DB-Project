@@ -8,7 +8,18 @@ CREATE TABLE vendor_specific (
     location_name   VARCHAR(50)   NOT NULL
 );
 
+<<<<<<< HEAD
 
+=======
+INSERT INTO vendor_specific (vendor_name, vendor_product, vendor_price, stock, location_name)
+ VALUES
+('Pate', 'Pizza', 130.00, 40, 'STC first floor'),
+('Kilimanjaro', 'Pilau', 180.00, 30, 'STC rooftop');
+_id)
+)
+id)
+)
+>>>>>>> 37d095199ade2b3b246648fbfb3f0bddaac3d208
 
 
 CREATE TABLE vendor_overall (

@@ -8,6 +8,136 @@ import mysql.connector
 VALID_ROLES = ('student' , 'vendor')
 
 VENDOR_HOME = {1:'vendor.pate', 2: 'vendor.kilimanjaro'}
+@auth_bp.route('/role')
+def role():
+    """ Choose a role before registration"""
+    return render_template(role.html)
+
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    role = request.values.get('role', '').strip().lower()
+
+    if role not in VALID_ROLES:
+        return redirect(url_for('auth.role'))
+
+    if request.method == 'GET':
+        return render_template('register.html', role=role)
+
+    # Common account fields
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip().lower()
+    password = request.form.get('password', '')
+    confirm = request.form.get('confirm_password', '')
+
+    if not name or not email or not password or not confirm:
+        flash('Please fill in all required fields.', 'error')
+        return render_template('register.html', role=role), 400
+
+    if len(password) < 8:
+        flash('Password must be at least 8 characters.', 'error')
+        return render_template('register.html', role=role), 400
+
+    if password != confirm:
+        flash('Passwords do not match.', 'error')
+        return render_template('register.html', role=role), 400
+
+    # Vendor-specific application fields
+    vendor_name = ''
+    location_description = ''
+    campus_status = ''
+
+    if role == 'vendor':
+        vendor_name = request.form.get('vendor_name', '').strip()
+        location_description = request.form.get(
+            'location_description', ''
+        ).strip()
+        campus_status = request.form.get('campus_status', '').strip()
+
+        if not vendor_name or campus_status not in (
+            'on-campus', 'off-campus'
+        ):
+            flash(
+                'Please provide a vendor name and valid campus status.',
+                'error'
+            )
+            return render_template('register.html', role=role), 400
+
+    db = get_db()
+    cursor = None
+
+    try:
+        cursor = db.cursor()
+
+        # Create the account first.
+        cursor.execute(
+            """
+            INSERT INTO users (name, email, password_hash, role)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (name, email, hash_password(password), role)
+        )
+
+        user_id = cursor.lastrowid
+
+        if role == 'student':
+            cursor.execute(
+                """
+                INSERT INTO students (user_id)
+                VALUES (%s)
+                """,
+                (user_id,)
+            )
+
+        else:
+            cursor.execute(
+                """
+                INSERT INTO vendors
+                    (user_id, name, location_description,
+                     campus_status, approval_status)
+                VALUES (%s, %s, %s, %s, 'pending')
+                """,
+                (
+                    user_id,
+                    vendor_name,
+                    location_description or None,
+                    campus_status
+                )
+            )
+
+        db.commit()
+
+    except mysql.connector.IntegrityError as err:
+        db.rollback()
+
+        if err.errno == 1062:
+            flash('That email is already registered.', 'error')
+            return render_template('register.html', role=role), 409
+
+        flash('The account could not be created. Please try again.', 'error')
+        return render_template('register.html', role=role), 500
+
+    except mysql.connector.Error:
+        db.rollback()
+        flash('A database error occurred. Please try again.', 'error')
+        return render_template('register.html', role=role), 500
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+        db.close()
+
+    if role == 'student':
+        flash('Account created! Please log in.', 'success')
+    else:
+        flash(
+            'Application submitted! Your vendor account is pending '
+            'administrator approval.',
+            'success'
+        )
+
+    return redirect(url_for('auth.login'))
+
+
 
 
 

@@ -62,8 +62,10 @@
         }
         .vendors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .vendor-card {
             background-color: white;
@@ -130,47 +132,4 @@
         </div>
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="cart.html">Cart 🛒</a>
-        </div>
-    </header>
-
-    <main>
-        <div class="welcome-banner">
-            <h1>Select a Campus Vendor</h1>
-            <p>Choose your preferred cafeteria or food joint to explore their menu and order meals.</p>
-        </div>
-
-        <div class="vendors-grid">
-            <!-- Pate Cafeteria Card -->
-            <div class="vendor-card">
-                <div class="vendor-image-placeholder">Pate Logo / Image</div>
-                <div class="vendor-info">
-                    <div class="vendor-name">Pate Cafeteria</div>
-                    <div class="vendor-desc">Freshly prepared campus meals, burgers, snacks, and drinks.</div>
-                    <a href="pate.html" class="visit-btn">View Menu</a>
-                </div>
-            </div>
-
-            <!-- Upesi Joint Card -->
-            <div class="vendor-card">
-                <div class="vendor-image-placeholder">Upesi Logo / Image</div>
-                <div class="vendor-info">
-                    <div class="vendor-name">Upesi Joint</div>
-                    <div class="vendor-desc">Quick bites, fast service, and student-favorite refreshments.</div>
-                    <a href="upesi.html" class="visit-btn">View Menu</a>
-                </div>
-            </div>
-
-            <!-- Placeholder for future vendors if needed -->
-            <div class="vendor-card">
-                <div class="vendor-image-placeholder">Cafeteria 3 Logo</div>
-                <div class="vendor-info">
-                    <div class="vendor-name">Kilimanjaro</div>
-                    <div class="vendor-desc">Hearty local dishes, rice meals, and traditional specialties.</div>
-                    <a href="#" class="visit-btn" style="background-color: #6c757d; cursor: not-allowed;">Coming Soon</a>
-                </div>
-            </div>
-        </div>
-    </main>
-</body>
-</html>
+            <a

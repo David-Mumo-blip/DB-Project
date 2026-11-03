@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunger Hunt | Payment</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fffaf2;
+            color: #292929;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            color: rgba(0, 0, 0, 0.813);;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 20px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #777;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+        }
+
+        .section h2 {
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+        /* Order summary */
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .total {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .total span:last-child {
+            color: #198754;
+        }
+
+        /* Payment options */
+        .payment-option {
+            border: 1px solid #ddd;
+            padding: 16px;
+            border-radius: 9px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .payment-option:hover {
+            border-color:#198754;
+        }
+
+        .payment-option.selected {
+            border: 2px solid #198754;
+            background: #fff8f1;
+        }
+
+        .payment-option input {
+            accent-color: #198754;
+        }
+
+        .payment-option strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .payment-option small {
+            color: #888;
+        }
+
+        /* Payment details */
+        .payment-details {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="tel"] {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input[type="tel"]:focus {
+            border-color: #198754;
+        }
+
+        .payment-note {
+            color: #777;
+            font-size: 13px;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Button */
+        .place-order {
+            width: 100%;
+            padding: 16px;
+            background: #198754;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .place-order:hover {
+            background: #198754;
+        }
+
+        .message {
+            display: none;
+            background: #eaf8ed;
+            color: #198754;;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            nav {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 8px;
+                font-size: 13px;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+
+            .heading h1 {
+                font-size: 26px;
+            }
+
+            .section {
+                padding: 18px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">HUNGER HUNT.</div>
+
+        <div>
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+        </div>
+    </nav>
+
+
+    <main class="container">
+
+        <div class="heading">
+            <h1>Complete your order</h1>
+            <p>You're just one step away from enjoying your meal.</p>
+        </div>
+
+
+        <!-- ORDER SUMMARY -->
+        <div class="section">
+
+            <h2>Order Summary</h2>
+
+            <div class="order-item">
+                <span>Chicken Burger × 1</span>
+                <span>KSh 450</span>
+            </div>
+
+            <div class="order-item">
+                <span>Fries × 1</span>
+                <span>KSh 200</span>
+            </div>
+
+            <div class="order-item">
+                <span>Delivery Fee</span>
+                <span>KSh 100</span>
+            </div>
+
+            <div class="order-item total">
+                <span>Total</span>
+                <span>KSh 750</span>
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT METHODS -->
+        <div class="section">
+
+            <h2>Choose Payment Method</h2>
+
+            <form id="paymentForm">
+
+                <!-- M-PESA -->
+                <label class="payment-option selected">
+
+                    <input type="radio" name="payment"
+                        value="mpesa" checked>
+
+                    <div>
+                        <strong>M-Pesa</strong>
+                        <small>Pay using your Safaricom number</small>
+                    </div>
+
+                </label>
+
+
+                <!-- CARD -->
+                <label class="payment-option">
+
+                    <input type="radio" name="payment"
+                        value="card">
+
+                    <div>
+                        <strong>Card Payment</strong>
+                        <small>Visa or Mastercard</small>
+                    </div>
+
+                </label>
+
+
+                <!-- CASH -->
+                <label class="payment-option">
+
+                    <input type="radio" name="payment"
+                        value="cash">
+
+                    <div>
+                        <strong>Cash on Delivery</strong>
+                        <small>Pay when your food arrives</small>
+                    </div>
+
+                </label>
+
+
+                <!-- M-PESA DETAILS -->
+                <div id="mpesaDetails"
+                    class="payment-details active">
+
+                    <label for="phone">M-Pesa Phone Number</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="e.g. 0712345678"
+                    >
+
+                    <p class="payment-note">
+                        Enter the Safaricom number you want to
+                        use for payment.
+                    </p>
+
+                </div>
+
+
+                <!-- CARD DETAILS -->
+                <div id="cardDetails" class="payment-details">
+
+                    <p class="payment-note">
+                        You will be redirected to a secure payment
+                        provider to enter your card details.
+                        Card payments require a payment gateway
+                        integration before they can work.
+                    </p>
+
+                </div>
+
+
+                <!-- CASH DETAILS -->
+                <div id="cashDetails" class="payment-details">
+
+                    <p class="payment-note">
+                        You will pay KSh 750 in cash when your
+                        order is delivered.
+                    </p>
+
+                </div>
+
+
+                <button type="submit" class="place-order">
+                    PLACE ORDER · KSh 750
+                </button>
+
+            </form>
+
+
+            <!-- CONFIRMATION -->
+            <div id="message" class="message"></div>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+        © 2026 HUNGER HUNT. All rights reserved.
+    </footer>
+
+
+    <script>
+
+        // Get payment options
+        const paymentOptions =
+            document.querySelectorAll('input[name="payment"]');
+
+        const mpesaDetails =
+            document.getElementById("mpesaDetails");
+
+        const cardDetails =
+            document.getElementById("cardDetails");
+
+        const cashDetails =
+            document.getElementById("cashDetails");
+
+        const phone =
+            document.getElementById("phone");
+
+        const message =
+            document.getElementById("message");
+
+        // Change payment method
+        paymentOptions.forEach(option => {
+
+            option.addEventListener("change", function() {
+
+                // Hide all payment details
+                mpesaDetails.classList.remove("active");
+                cardDetails.classList.remove("active");
+                cashDetails.classList.remove("active");
+
+                // Remove selected styling
+                document.querySelectorAll(".payment-option")
+                    .forEach(label => {
+                        label.classList.remove("selected");
+                    });
+
+                // Highlight selected option
+                this.closest(".payment-option")
+                    .classList.add("selected");
+
+                // Show relevant details
+                if (this.value === "mpesa") {
+                    mpesaDetails.classList.add("active");
+                }
+
+                else if (this.value === "card") {
+                    cardDetails.classList.add("active");
+                }
+
+                else if (this.value === "cash") {
+                    cashDetails.classList.add("active");
+                }
+
+                // Hide old confirmation
+                message.style.display = "none";
+
+            });
+
+        });
+
+
+        // Handle order submission
+        document.getElementById("paymentForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const selectedPayment =
+                    document.querySelector(
+                        'input[name="payment"]:checked'
+                    ).value;
+
+                message.style.display = "none";
+
+                // Validate M-Pesa number
+                if (selectedPayment === "mpesa") {
+
+                    const phoneNumber = phone.value.trim();
+
+                    const validPhone =
+                        /^(?:\+254|254|0)?7\d{8}$/.test(phoneNumber)
+                        || /^(?:\+254|254|0)1\d{8}$/.test(phoneNumber);
+
+                    if (!validPhone) {
+                        alert("Please enter a valid Kenyan mobile number.");
+                        phone.focus();
+                        return;
+                    }
+
+                }
+
+                // Card payment
+                if (selectedPayment === "card") {
+
+                    alert(
+                        "Card payment is not connected yet. " +
+                        "A secure payment gateway needs to be integrated."
+                    );
+
+                    return;
+                }
+
+                // Cash or M-Pesa demo confirmation
+                if (selectedPayment === "mpesa") {
+
+                    message.innerHTML =
+                        "<strong>Order demo created!</strong><br>" +
+                        "M-Pesa payment has not been initiated. " +
+                        "Connect the Daraja API to request payment.";
+
+                }
+
+                else {
+
+                    message.innerHTML =
+                        "<strong>Order demo created!</strong><br>" +
+                        "Your selected payment method is Cash on Delivery.";
+
+                }
+
+                message.style.display = "block";
+
+            });
+
+    </script>
+
+</body>
+</html>

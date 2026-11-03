@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart - Hunger Hunt</title>
-
     <style>
         body {
             margin: 0;
@@ -13,7 +11,6 @@
             background-color: antiquewhite;
             color: black;
         }
-
         header {
             display: flex;
             justify-content: space-between;
@@ -22,19 +19,16 @@
             background-color: antiquewhite;
             border-bottom: 1px solid #ccc;
         }
-
         .logo {
             font-size: 26px;
             font-weight: bold;
             color: rgba(0, 0, 0, 0.813);
         }
-
         .tagline {
             font-size: 14px;
             color: #666;
             margin-top: 5px;
         }
-
         .nav-links a {
             text-decoration: none;
             color: #333;
@@ -44,424 +38,111 @@
             border-radius: 8px;
             margin-left: 10px;
         }
-
         .nav-links a:hover {
             background-color: #333;
-            color: white;
+            color: #fff;
         }
-
         main {
-            width: 88%;
-            max-width: 1000px;
-            margin: auto;
-            padding: 40px 0;
+            padding: 40px 6%;
+            max-width: 900px;
+            margin: 0 auto;
         }
-
-        .page-heading {
+        h1 {
             text-align: center;
+            font-size: 36px;
             margin-bottom: 30px;
+            color: #222;
         }
-
-        .page-heading h1 {
-            font-size: 38px;
-        }
-
-        .cart-layout {
-            display: grid;
-            grid-template-columns: 1.7fr 1fr;
-            gap: 25px;
-        }
-
-        .cart-panel,
-        .summary-panel,
-        .empty-cart {
+        .cart-container {
             background-color: white;
             border-radius: 15px;
-            padding: 22px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
-
-        .cart-item {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 15px;
-            padding: 18px 0;
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .cart-table th, .cart-table td {
+            text-align: left;
+            padding: 12px;
             border-bottom: 1px solid #eee;
         }
-
-        .item-name {
-            font-size: 17px;
-            margin-bottom: 5px;
-        }
-
-        .item-price {
+        .cart-table th {
             color: #666;
             font-size: 14px;
+            text-transform: uppercase;
         }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 12px;
+        .item-placeholder {
+            color: #888;
+            font-style: italic;
         }
-
-        .quantity-controls button {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ccc;
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
             border-radius: 6px;
-            background: #fffaf4;
             cursor: pointer;
-            font-size: 18px;
-        }
-
-        .item-actions {
-            text-align: right;
-        }
-
-        .item-total {
             font-weight: bold;
         }
-
-        .remove-button {
-            display: block;
-            margin-top: 12px;
-            background: none;
-            border: none;
-            color: #b42318;
-            cursor: pointer;
-            text-decoration: underline;
+        .remove-btn:hover {
+            background-color: #bb2d3b;
         }
-
-        .summary-panel h2 {
-            margin-top: 0;
-        }
-
-        .summary-line,
-        .summary-total {
+        .cart-summary {
             display: flex;
             justify-content: space-between;
-            margin: 15px 0;
+            align-items: center;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            margin-top: 10px;
         }
-
-        .summary-total {
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
-            font-size: 19px;
+        .total-price {
+            font-size: 22px;
             font-weight: bold;
+            color: #198754;
         }
-
-        .checkout-button,
-        .continue-button {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 9px;
-            background-color: #e85d04;
+        .checkout-btn {
+            background-color: #198754;
             color: white;
-            text-align: center;
-            text-decoration: none;
+            border: none;
+            padding: 12px 25px;
             font-size: 16px;
             font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
-            box-sizing: border-box;
+            transition: background-color 0.2s;
         }
-
-        .checkout-button:hover,
-        .continue-button:hover {
-            background-color: #c94f00;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .empty-cart p {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .empty-cart .continue-button {
-            max-width: 240px;
-            margin: 20px auto 0;
-        }
-
-        .notice {
-            color: #666;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 720px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .cart-layout {
-                grid-template-columns: 1fr;
-            }
+        .checkout-btn:hover {
+            background-color: #157347;
         }
     </style>
 </head>
-
 <body>
-
     <header>
         <div>
             <div class="logo">Hunger Hunt</div>
-            <div class="tagline">Student Vendor Portal</div>
+            <div class="tagline">Student Checkout</div>
         </div>
-
         <div class="nav-links">
             <a href="index.html">Home</a>
-            <a href="pate.html">Continue Shopping</a>
+            <a href="cart.html">Cart 🛒</a>
         </div>
     </header>
 
     <main>
-
-        <div class="page-heading">
-            <h1>Your Shopping Cart</h1>
-            <p>Review your selected meals before checkout.</p>
-        </div>
-
-        <section id="cart-content"></section>
-
-    </main>
-
-    <script>
-
-        const CART_KEY = "hungerHuntCart";
-        const DELIVERY_FEE = 0;
-
-        const cartContent = document.getElementById("cart-content");
-
-        // Retrieve cart items from browser storage
-        function getCart() {
-            try {
-                const cart = JSON.parse(
-                    localStorage.getItem(CART_KEY) || "[]"
-                );
-
-                return Array.isArray(cart) ? cart : [];
-
-            } catch {
-                return [];
-            }
-        }
-
-        // Save cart items
-        function saveCart(cart) {
-            localStorage.setItem(
-                CART_KEY,
-                JSON.stringify(cart)
-            );
-        }
-
-        // Format prices in Kenyan shillings
-        function formatPrice(amount) {
-            return "KSh " + Number(amount).toLocaleString("en-KE");
-        }
-
-        // Display cart contents
-        function renderCart() {
-
-            const cart = getCart();
-
-            // Display message if cart is empty
-            if (cart.length === 0) {
-
-                cartContent.innerHTML = `
-                    <div class="empty-cart">
-                        <h2>Your cart is empty</h2>
-
-                        <p>
-                            You haven't added any meals yet.
-                            Browse the Pate Cafeteria menu to get started.
-                        </p>
-
-                        <a href="pate.html" class="continue-button">
-                            Browse the Menu
-                        </a>
-                    </div>
-                `;
-
-                return;
-            }
-
-            // Calculate subtotal
-            const subtotal = cart.reduce((sum, item) => {
-                return sum +
-                    (Number(item.price) || 0) *
-                    (Number(item.quantity) || 1);
-            }, 0);
-
-            const total = subtotal + DELIVERY_FEE;
-
-            // Generate HTML for each item
-            const itemsHTML = cart.map((item, index) => {
-
-                const name = escapeHTML(item.name || "Food item");
-                const price = Number(item.price) || 0;
-                const quantity = Math.max(
-                    1,
-                    Number(item.quantity) || 1
-                );
-
-                return `
-                    <div class="cart-item">
-
-                        <div>
-                            <h3 class="item-name">${name}</h3>
-
-                            <p class="item-price">
-                                ${formatPrice(price)} each
-                            </p>
-
-                            <div class="quantity-controls">
-
-                                <button
-                                    onclick="changeQuantity(${index}, -1)">
-                                    −
-                                </button>
-
-                                <span>${quantity}</span>
-
-                                <button
-                                    onclick="changeQuantity(${index}, 1)">
-                                    +
-                                </button>
-
-                            </div>
-                        </div>
-
-                        <div class="item-actions">
-
-                            <span class="item-total">
-                                ${formatPrice(price * quantity)}
-                            </span>
-
-                            <button
-                                class="remove-button"
-                                onclick="removeItem(${index})">
-                                Remove
-                            </button>
-
-                        </div>
-
-                    </div>
-                `;
-
-            }).join("");
-
-            // Display cart and order summary
-            cartContent.innerHTML = `
-
-                <div class="cart-layout">
-
-                    <div class="cart-panel">
-                        ${itemsHTML}
-                    </div>
-
-                    <div class="summary-panel">
-
-                        <h2>Order Summary</h2>
-
-                        <div class="summary-line">
-                            <span>Subtotal</span>
-                            <span>${formatPrice(subtotal)}</span>
-                        </div>
-
-                        <div class="summary-line">
-                            <span>Delivery</span>
-                            <span>
-                                ${DELIVERY_FEE === 0
-                                    ? "To be confirmed"
-                                    : formatPrice(DELIVERY_FEE)}
-                            </span>
-                        </div>
-
-                        <div class="summary-total">
-                            <span>Total</span>
-                            <span>${formatPrice(total)}</span>
-                        </div>
-
-                        <button
-                            class="checkout-button"
-                            onclick="goToCheckout()">
-                            Proceed to Checkout
-                        </button>
-
-                        <p class="notice">
-                            Your order has not been placed yet.
-                            You will review and confirm it at checkout.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            `;
-        }
-
-        // Increase or decrease item quantity
-        function changeQuantity(index, change) {
-
-            const cart = getCart();
-
-            if (!cart[index]) return;
-
-            cart[index].quantity =
-                (Number(cart[index].quantity) || 1) + change;
-
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-            }
-
-            saveCart(cart);
-            renderCart();
-        }
-
-        // Remove an item
-        function removeItem(index) {
-
-            const cart = getCart();
-
-            cart.splice(index, 1);
-
-            saveCart(cart);
-            renderCart();
-        }
-
-        // Go to checkout
-        function goToCheckout() {
-
-            if (getCart().length > 0) {
-                window.location.href = "checkout.html";
-            }
-        }
-
-        // Prevent HTML from being inserted through item names
-        function escapeHTML(value) {
-            return String(value).replace(/[&<>"']/g, character => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-            })[character]);
-        }
-
-        // Load cart when page opens
-        renderCart();
-
-    </script>
-
-</body>
-</html>
+        <h1>Your Shopping Cart</h1>
+
+        <div class="cart-container">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Item Description</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    <!-- Placeholder

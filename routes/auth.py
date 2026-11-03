@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from routes.passwords import hash_password, verify_password  
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 from db import get_db

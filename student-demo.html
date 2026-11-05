@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student View (Test Page) - Hunger Hunt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Hunger Hunt</div>
+    <a class="back-home" href="#">Student Test Page</a>
+  </header>
+
+  <main>
+
+    <h1>Student View</h1>
+    <p class="description">Menu from: <strong id="vendorName">Pate</strong> (a test page so you can try the vendor logic)</p>
+
+    <div class="section">
+      <h2>Who are you?</h2>
+      <input type="text" id="studentID" placeholder="Your Student ID">
+      <button onclick="showNotifications()">Check Notifications</button>
+    </div>
+
+    <div class="section">
+      <h2>Menu</h2>
+      <div class="table-wrap">
+        <table id="menuTable">
+          <tr>
+            <th>Food</th>
+            <th>Icon</th>
+            <th>Price</th>
+            <th>In Stock</th>
+            <th>Quantity</th>
+            <th>Order</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>My Notifications</h2>
+      <div id="notificationList"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    Hunger Hunt Student Test Page
+  </footer>
+
+  <script src="storage.js"></script>
+  <script src="student-demo.js"></script>
+
+</body>
+
+</html>

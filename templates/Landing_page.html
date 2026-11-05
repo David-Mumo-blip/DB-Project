@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Hunger Hunt</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: antiquewhite;
+            color: black;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 6%;
+            background-color: antiquewhite;
+            border-bottom: 1px solid #ccc;
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.813);
+        }
+        .tagline {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        main {
+            padding: 40px 6%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .welcome-banner {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .welcome-banner h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .welcome-banner p {
+            font-size: 18px;
+            color: #555;
+        }
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .vendor-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .vendor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .vendor-image-placeholder {
+            width: 100%;
+            height: 160px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .vendor-info {
+            padding: 20px;
+        }
+        .vendor-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .vendor-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .visit-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 0;
+            background-color: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            box-sizing: border-box;
+        }
+        .visit-btn:hover {
+            background-color: #157347;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <div class="logo">Hunger Hunt</div>
+            <div class="tagline">Student Dashboard</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="cart.html">Cart 🛒</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="welcome-banner">
+            <h1>Select a Campus Vendor</h1>
+            <p>Choose your preferred cafeteria or food joint to explore their menu and order meals.</p>
+        </div>
+
+        <div class="vendors-grid">
+            <!-- Pate Cafeteria Card -->
+            <div class="vendor-card">
+                <div class="vendor-image-placeholder">Pate Logo / Image</div>
+                <div class="vendor-info">
+                    <div class="vendor-name">Pate Cafeteria</div>
+                    <a href="pate.html" class="visit-btn">View Menu</a>
+                </div>
+            </div>
+
+            <!-- Upesi Joint Card -->
+            <div class="vendor-card">
+                <div class="vendor-image-placeholder">Upesi Joint</div>
+                <div class="vendor-info">
+                    <div class="vendor-name">Upesi Joint</div>
+                    <a href="upesi.html" class="visit-btn">View Menu</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

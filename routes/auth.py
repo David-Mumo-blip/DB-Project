@@ -11,7 +11,7 @@ VENDOR_HOME = {1:'vendor.pate', 2: 'vendor.kilimanjaro'}
 @auth_bp.route('/role')
 def role():
     """ Choose a role before registration"""
-    return render_template(role.html)
+    return render_template('role.html')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -211,9 +211,9 @@ def login():
                 if endpoint:
                     return redirect(url_for(endpoint))
 
-                return redirect(url_for('index'))
+                return redirect(url_for('Landing_page.html'))
 
-            return redirect(url_for('index'))
+            return redirect(url_for('Landing_page.html'))
 
     except mysql.connector.Error:
         db.rollback()
@@ -231,19 +231,3 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
         
-
-
-@auth_bp.route('/register/student', methods=['GET', 'POST'])
-def register_student():
-    if request.method == 'GET':
-        return render_template('student-signup.html')
-    # return create_account('student', 'student-signup.html')
-
-
-@auth_bp.route('/register/vendor', methods=['GET', 'POST'])
-def register_vendor():
-    if request.method == 'GET':
-        return render_template('Vendor-specifc.html')
-    # return create_account('vendor', 'vendor-signup.html')
-
-

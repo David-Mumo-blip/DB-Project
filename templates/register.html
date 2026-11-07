@@ -1,24 +1,30 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Login - Hunger Hunt</title>
+    <title>
+        {{ 'Vendor Application' if role == 'vendor' else 'Create Account' }} | Stratizen
+    </title>
+</head>
 
-    <style>
+<style>
         * {
             box-sizing: border-box;
         }
 
-        body {
+        body.auth-page {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
             background-color: antiquewhite;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        header {
+        /* Header & Navigation */
+        header.auth-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -27,162 +33,374 @@
             border-bottom: 1px solid #ddd;
         }
 
-        .logo {
+        header.auth-nav .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
             font-size: 26px;
             font-weight: bold;
             color: rgba(0, 0, 0, 0.813);
         }
 
-        .back-home {
+        .brand-mark {
+            background-color: #00695c;
+            color: white;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 20px;
+        }
+
+        .nav-note {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .nav-note a {
+            color: #00695c;
             text-decoration: none;
-            color: #333;
             font-weight: bold;
         }
 
-        main {
-            min-height: 80vh;
+        .nav-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Area */
+        main.auth-main {
+            flex: 1;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
+        }
+
+        /* Auth Card */
+        .auth-card {
+            background-color: white;
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 35px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .auth-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
+        .auth-eyebrow {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #00695c;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
 
-        .description {
+        .auth-card h1 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            color: #222;
+        }
+
+        .auth-description {
             color: #666;
-            font-size: 17px;
-            margin-bottom: 40px;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 30px;
         }
 
-        .login-options {
+        /* Form Elements */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #00695c;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 105, 92, 0.15);
+        }
+
+        .field-hint {
+            font-size: 12px;
+            color: #777;
+            margin-top: 2px;
+        }
+
+        /* Submit Button */
+        .auth-button {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
             width: 100%;
-            max-width: 800px;
-        }
-
-        .login-card {
-            background-color: white;
-            width: 320px;
-            padding: 35px 25px;
-            border-radius: 18px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-
-        .login-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .icon {
-            font-size: 55px;
-            margin-bottom: 15px;
-        }
-
-        .login-card h2 {
-            margin-bottom: 12px;
-        }
-
-        .login-card p {
-            color: #666;
-            line-height: 1.6;
-            min-height: 50px;
-        }
-
-        .login-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 13px 25px;
+            margin-top: 10px;
+            padding: 14px 25px;
             background-color: #00695c;
             color: white;
-            text-decoration: none;
+            border: none;
             border-radius: 8px;
+            font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
 
-        .login-button:hover {
+        .auth-button:hover {
             background-color: #004d40;
         }
 
-        footer {
+        /* Switch Links & Footer */
+        .auth-switch {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .auth-switch a {
+            color: #00695c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        footer.auth-footer {
             text-align: center;
             padding: 20px;
             color: #777;
+            font-size: 14px;
         }
 
+        /* Flash Messages */
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-message.error, .flash-message.danger {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .flash-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 28px;
+            header.auth-nav {
+                padding: 15px 5%;
             }
 
-            .login-card {
-                width: 100%;
-                max-width: 350px;
+            .auth-card {
+                padding: 25px 20px;
+            }
+
+            .auth-card h1 {
+                font-size: 24px;
             }
         }
     </style>
-</head>
+<body class="auth-page">
 
-<body>
+    <header class="auth-nav">
+        <a href="{{ url_for('index') }}" class="brand">
+            <span class="brand-mark">S</span>
+            <span>Stratizen</span>
+        </a>
 
-    <header>
-        <div class="logo">Hunger Hunt</div>
-        <a href="{{ url_for('index')}}" class="back-home">Back to Home</a>
+        <span class="nav-note">
+            Already a member?
+            <a href="{{ url_for('auth.login') }}">Log in</a>
+        </span>
     </header>
 
-    <main>
-        <h1>Welcome to Hunger Hunt!</h1>
-
-        <p class="description">
-            Choose an apppropriate account type.
-        </p>
-
-        <div class="login-options">
-
-            <div class="login-card">
-                <div class="icon"></div>
-
-                <h2>Student</h2>
-
-                <p>
-                    Discover delicious meals, explore food vendors
-                    and find your favorite food around Siwaka.
-                </p>
-
-                <a href="{{ url_for('auth.register_student')}}" class="login-button">
-                    Create Student Account
-                </a>
+    <main class="auth-main">
+        <section class="auth-card">
+            <div class="auth-icon" aria-hidden="true">
+                {{ '🍴' if role == 'vendor' else '🍽️' }}
             </div>
 
-            <div class="login-card">
-                <div class="icon"></div>
+            <span class="auth-eyebrow">
+                {{ 'Vendor registration' if role == 'vendor' else 'Made for campus life' }}
+            </span>
 
-                <h2>Vendor</h2>
+            <h1>
+                {{ 'Apply to join Stratizen.' if role == 'vendor' else 'Your next meal starts here.' }}
+            </h1>
 
-                <p>
-                    Manage your food business, showcase your menu
-                    and connect with hungry students.
-                </p>
+            <p class="auth-description">
+                {% if role == 'vendor' %}
+                    Tell us about yourself and your cafeteria.
+                    Your application will be reviewed by an administrator
+                    before your vendor account is activated.
+                {% else %}
+                    Create your account to explore campus food, discover
+                    your favourites, and make ordering simpler.
+                {% endif %}
+            </p>
 
-                <a href="{{ url_for('auth.register_vendor')}}" class="login-button">
-                    Create Vendor Account
-                </a>
-            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
 
-        </div>
+            <form class="auth-form"
+                  method="POST"
+                  action="{{ url_for('auth.register', role=role) }}">
+
+                <div class="form-group">
+                    <label for="name">Your full name</label>
+                    <input type="text"
+                           id="name"
+                           name="name"
+                           placeholder="Enter your full name"
+                           maxlength="100"
+                           autocomplete="name"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="you@example.com"
+                           maxlength="100"
+                           autocomplete="email"
+                           required>
+                </div>
+
+                {% if role == 'vendor' %}
+                    <div class="form-group">
+                        <label for="vendor_name">Cafeteria or business name</label>
+                        <input type="text"
+                               id="vendor_name"
+                               name="vendor_name"
+                               placeholder="e.g. Pate Cafeteria"
+                               maxlength="100"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location_description">Cafeteria location</label>
+                        <input type="text"
+                               id="location_description"
+                               name="location_description"
+                               placeholder="e.g. 2nd Floor, STC"
+                               maxlength="255">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="campus_status">Where is your cafeteria?</label>
+                        <select id="campus_status"
+                                name="campus_status"
+                                required>
+                            <option value="" disabled selected>
+                                Select a location type
+                            </option>
+                            <option value="on-campus">On campus</option>
+                            <option value="off-campus">Off campus</option>
+                        </select>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="At least 8 characters"
+                           minlength="8"
+                           autocomplete="new-password"
+                           required>
+                    <small class="field-hint">
+                        Use at least 8 characters.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm password</label>
+                    <input type="password"
+                           id="confirm_password"
+                           name="confirm_password"
+                           placeholder="Enter your password again"
+                           minlength="8"
+                           autocomplete="new-password"
+                           required>
+                </div>
+
+                <button class="auth-button" type="submit">
+                    {{ 'Submit vendor application' if role == 'vendor' else 'Create my account' }}
+                    <span aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                {% if role == 'vendor' %}
+                    Want to register as a student instead?
+                    <a href="{{ url_for('auth.register', role='student') }}">
+                        Student registration
+                    </a>
+                {% else %}
+                    Already have an account?
+                    <a href="{{ url_for('auth.login') }}">Log in instead</a>
+                {% endif %}
+            </p>
+        </section>
     </main>
 
-    
+    <footer class="auth-footer">
+        A little closer to your next favourite meal.
+    </footer>
 
 </body>
 </html>
-

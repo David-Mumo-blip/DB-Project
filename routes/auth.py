@@ -233,11 +233,6 @@ def logout():
         
 
 
-@auth_bp.route('/register')
-def register():
-    return render_template('register.html')
-
-
 @auth_bp.route('/register/student', methods=['GET', 'POST'])
 def register_student():
     if request.method == 'GET':

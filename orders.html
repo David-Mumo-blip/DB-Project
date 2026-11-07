@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders - Hunger Hunt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Hunger Hunt</div>
+    <div class="header-buttons">
+      <button class="secondary-btn" onclick="goBackToVendor()">Back to Dashboard</button>
+      <a class="back-home" href="#">Back to Home</a>
+    </div>
+  </header>
+
+  <main>
+
+    <h1>Orders Received</h1>
+    <p class="description">Vendor: <strong id="vendorName">Pate</strong></p>
+
+    <!-- ORDERS SECTION -->
+    <div class="section">
+      <h2>Orders</h2>
+
+      <div class="table-wrap">
+        <table id="orderTable">
+          <tr>
+            <th>Order No</th>
+            <th>Date</th>
+            <th>Student ID</th>
+            <th>Food ID</th>
+            <th>Food</th>
+            <th>Quantity</th>
+            <th>Total Paid</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD ORDER SECTION (pretend a student has ordered) -->
+    <div class="section">
+      <h2>Add Order</h2>
+
+      <input type="text" id="orderStudentID" placeholder="Student ID">
+      <input type="text" id="orderFoodID" placeholder="Food ID">
+      <input type="number" id="orderQuantity" placeholder="Quantity">
+
+      <br>
+
+      <button onclick="addOrder()">Add Order</button>
+    </div>
+
+  </main>
+
+  <footer>
+    Hunger Hunt Vendor Page
+  </footer>
+
+  <script src="storage.js"></script>
+  <script src="orders.js"></script>
+
+</body>
+
+</html>

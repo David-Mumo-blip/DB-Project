@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Product - Hunger Hunt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Hunger Hunt</div>
+    <div class="header-buttons">
+      <button onclick="goToOrders()">Orders</button>
+      <a class="back-home" href="#" onclick="goBackToVendor(); return false;">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+
+    <h1>Add New Product</h1>
+    <p class="description">Adding to: <strong id="vendorName">Pate</strong></p>
+
+    <div class="section">
+      <h2>Product Details</h2>
+
+      <input type="text" id="foodName" placeholder="Food name">
+      <input type="text" id="foodIcon" placeholder="Icon (e.g. an emoji)">
+      <input type="text" id="foodID" placeholder="Food ID">
+      <input type="number" id="foodPrice" placeholder="Price">
+      <input type="number" id="foodStock" placeholder="Stock">
+
+      <p class="message" id="message"></p>
+
+      <div class="button-row">
+        <button onclick="addFood()">Add Product</button>
+        <button class="secondary-btn" onclick="goBackToVendor()">Cancel</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    Hunger Hunt Vendor Page
+  </footer>
+
+  <script src="storage.js"></script>
+  <script src="new-product.js"></script>
+
+</body>
+
+</html>

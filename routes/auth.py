@@ -197,23 +197,23 @@ def login():
             # Remember to return to add checks on vendor's approval statuses.
 
 
-            session.clear()
-            session['user_id'] = user['id']
-            session['name'] = user['name']
-            session['role'] = user['role']
+        session.clear()
+        session['user_id'] = user['id']
+        session['name'] = user['name']
+        session['role'] = user['role']
 
-            if vendor_id is not None:
+        if vendor_id is not None:
                 session['vendor_id'] = vendor_id
 
-            if user['role']== 'vendor':
+        if user['role']== 'vendor':
                 endpoint = VENDOR_HOME.get(vendor_id)
 
                 if endpoint:
                     return redirect(url_for(endpoint))
 
-                return redirect(url_for('Landing_page.html'))
+                return redirect(url_for('auth.landing_page'))
 
-            return redirect(url_for('Landing_page.html'))
+        return redirect(url_for('auth.landing_page'))
 
     except mysql.connector.Error:
         db.rollback()
@@ -230,4 +230,8 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@auth_bp.route('/landing')
+def landing_page():
+    return render_template('Landing_page.html')
         

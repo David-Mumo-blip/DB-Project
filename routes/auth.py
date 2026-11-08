@@ -181,9 +181,9 @@ def login():
         if user['role'] == 'vendor':
             cursor.execute(
                 """
-                SELECT id
+                SELECT vendor_id
                 FROM vendor_specific
-                WHERE user_id = %s
+                WHERE overall_id = %s
                 LIMIT 1
                 """,
                 (user['id'],)
@@ -193,6 +193,8 @@ def login():
             if not vendor:
                 flash("Your vendor profile is unavailable.", 'error')
                 return render_template('login.html'), 403
+
+            vendor_id = vendor['id']
 
             # Remember to return to add checks on vendor's approval statuses.
 
@@ -215,7 +217,8 @@ def login():
 
         return redirect(url_for('auth.landing_page'))
 
-    except mysql.connector.Error:
+    except mysql.connector.Error as e:
+        print("LOGIN DB ERROR:", e)
         db.rollback()
         flash('A database error occured. Please try again')
         return render_template('login.html'), 500
@@ -234,4 +237,24 @@ def logout():
 @auth_bp.route('/landing')
 def landing_page():
     return render_template('Landing_page.html')
+
+@auth_bp.route('/pate')
+def pate():
+    return render_template('pate.html')
+
+@auth_bp.route('/upesi')
+def upesi():
+    return render_template('upesi.html')
+
+@auth_bp.route('/kerinton')
+def kerinton():
+    return render_template('kerinton.html')
+
+@auth_bp.route('/georgies')
+def georgies():
+    return render_template('georgies.html')
+
+@auth_bp.route('/cart')
+def cart():
+    return render_template('cart.html')
         

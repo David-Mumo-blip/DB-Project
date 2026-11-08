@@ -121,8 +121,8 @@
             <div class="tagline">Student Vendor Portal</div>
         </div>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cart.html">Cart 🛒</a>
+            <a href="{{ url_for('auth.landing_page')}}" class="login">Back to Home</a>
+            <a href="{{ url_for('auth.cart')}}" class="login">Cart</a>
         </div>
     </header>
 
@@ -136,25 +136,25 @@
         <div id="menu" class="menu-grid">
             <!-- Card Box 1 Template -->
             <div class="food-card">
-                <div class="food-image-placeholder">Food Image Preview</div>
-                <div class="food-name">Item Name</div>
-                <div class="food-price">KSh 0.00</div>
+                <img src="{{ url_for('static', filename='images/chapo.jpg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Chapati</div>
+                <div class="food-price">KSh 20.00</div>
                 <button class="add-btn">Add to Cart</button>
             </div>
 
             <!-- Card Box 2 Template -->
             <div class="food-card">
-                <div class="food-image-placeholder">Food Image Preview</div>
-                <div class="food-name">Item Name</div>
-                <div class="food-price">KSh 0.00</div>
+                <img src="{{ url_for('static', filename='images/samosa.jpeg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Samosa</div>
+                <div class="food-price">KSh 50.00</div>
                 <button class="add-btn">Add to Cart</button>
             </div>
 
             <!-- Card Box 3 Template -->
             <div class="food-card">
-                <div class="food-image-placeholder">Food Image Preview</div>
-                <div class="food-name">Item Name</div>
-                <div class="food-price">KSh 0.00</div>
+                <img src="{{ url_for('static', filename='images/mandazi.jpeg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Mandazi</div>
+                <div class="food-price">KSh 10.00</div>
                 <button class="add-btn">Add to Cart</button>
             </div>
         </div>

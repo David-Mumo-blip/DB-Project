@@ -37,6 +37,7 @@ def role():
     return render_template('role.html')
 
 
+
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     role = request.values.get('role', '').strip().lower()
@@ -219,55 +220,3 @@ def logout():
     return redirect(url_for('index'))
 
 
-@auth_bp.route('/landing')
-def landing():
-    return render_template('main.html')
-
-
-@auth_bp.route('/pate')
-def pate():
-    return render_template('pate.html')
-
-
-@auth_bp.route('/upesi')
-def upesi():
-    return render_template('upesi.html')
-
-
-@auth_bp.route('/kerinton')
-def kerinton():
-    return render_template('kerinton.html')
-
-
-@auth_bp.route('/georgies')
-def georgies():
-    return render_template('georgies.html')
-
-
-@auth_bp.route('/cart')
-def cart():
-    return render_template('cart.html')
-
-
-@auth_bp.route('/vendor/pate')
-@vendor_only(5)
-def pate_vendor():
-    return render_template('patevv.html')
-
-
-@auth_bp.route('/vendor/georgie')
-@vendor_only(6)
-def georgie_vendor():
-    return render_template('georgievv.html')
-
-
-@auth_bp.route('/vendor/upesi')
-@vendor_only(7)
-def upesi_vendor():
-    return render_template('upesivv.html')
-
-
-@auth_bp.route('/vendor/kerinton')
-@vendor_only(8)
-def kerinton_vendor():
-    return render_template('kerintonvv.html')

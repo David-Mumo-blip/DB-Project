@@ -201,7 +201,7 @@ def login():
             if endpoint:
                 return redirect(url_for(endpoint))
 
-        return redirect(url_for('auth.main'))
+        return redirect(url_for('auth.landing'))
 
     except mysql.connector.Error as e:
         print("LOGIN DB ERROR:", e)

@@ -52,10 +52,8 @@
           <span class="kpi-label">Goal Progress</span>
           <div class="kpi-value"><span id="percent">{{ percent | default(0) }}</span>%</div>
           <div class="progress-box">
-<div class="progress-box">
-          <div class="progress-bar" id="progressBar" style="width: {{ percent if percent is defined and percent is not none else 0 }}%;"></div>
-</div>      
-</div>
+          <!-- <div class="progress-bar" id="progressBar" style="width: {{ percent | default(0, true) }}%;"></div>        </div>
+      </div> -->
     </section>
 
     <!-- STOCK / PRODUCT MANAGEMENT SECTION -->

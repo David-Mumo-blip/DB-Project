@@ -15,7 +15,7 @@
     <div class="header-buttons">
       <!-- FLASK ROUTING -->
       <a href="{{ url_for('orders') }}" class="btn secondary-btn">Orders</a>
-      <a class="back-home" href="{{ url_for('home') }}">Back to Home</a>
+      <a class="back-home" href="{{ url_for('index') }}">Back to Home</a>
     </div>
   </header>
 
@@ -52,7 +52,7 @@
           <span class="kpi-label">Goal Progress</span>
           <div class="kpi-value"><span id="percent">{{ percent | default(0) }}</span>%</div>
           <div class="progress-box">
-            <div class="progress-bar" id="progressBar" style="width: {{ percent | default(0) }}%;"></div>
+            <!-- <div class="progress-bar" id="progressBar" style="width: {{ percent | default(0) }}%;"></div> -->
           </div>
         </div>
       </div>

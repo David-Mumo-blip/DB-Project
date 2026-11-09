@@ -4,71 +4,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Georgie Vendor Page - Hunger Hunt</title>
-
-  <!-- All the styling lives in style.css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+  <title>Gerogie's Vendor Page - Hunger Hunt</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
   <header>
     <div class="logo">Hunger Hunt</div>
-
     <div class="header-buttons">
-      
-      <!-- ROUTING LOGIC: this button takes the vendor to the Orders page -->
-      <button id="ordersButton" onclick="goToOrders()">Orders</button>
-      <a class="back-home" href="#">Back to Home</a>
+      <!-- FLASK ROUTING -->
+      <a href="{{ url_for('orders') }}" class="btn secondary-btn">Orders</a>
+      <a class="back-home" href="{{ url_for('home') }}">Back to Home</a>
     </div>
   </header>
 
   <main>
 
-    <h1>Georgie Vendor Dashboard</h1>
-    <p class="description">Manage your food stock, orders, revenue and goal.</p>
+    <div class="dashboard-header">
+      <h1>Gerogie's Vendor Dashboard</h1>
+      <p class="description">Manage your food stock, orders, revenue, and goals.</p>
+    </div>
 
     <!-- REVENUE SECTION -->
-    <div class="section">
-      <h2>Money Made</h2>
-
-      <p>Revenue: KSh <span id="revenue">0</span></p>
-
-      <input type="number" id="goalInput" placeholder="Enter revenue goal">
-      <button onclick="setGoal()">Set Goal</button>
-
-      <p>Goal: KSh <span id="goal">0</span></p>
-      <p>You have made <span id="percent">0</span>% of your goal.</p>
-
-      <div class="progress-box">
-        <div class="progress-bar" id="progressBar"></div>
+    <section class="section">
+      <div class="section-title">
+        <h2>Financial Overview</h2>
       </div>
-    </div>
 
-    <!-- STOCK SECTION -->
-    <div class="section">
-      <h2>My Stock</h2>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Total Revenue</span>
+          <div class="kpi-value">KSh <span id="revenue">{{ revenue | default(0) }}</span></div>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-label">Revenue Goal</span>
+          <div class="kpi-value">KSh <span id="goal">{{ goal | default(0) }}</span></div>
+          
+          <form action="{{ url_for('set_goal') }}" method="POST" class="goal-input-group">
+            <input type="number" name="goal" id="goalInput" placeholder="Set target goal" required>
+            <button type="submit" class="btn secondary-btn sm-btn">Set Goal</button>
+          </form>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-label">Goal Progress</span>
+          <div class="kpi-value"><span id="percent">{{ percent | default(0) }}</span>%</div>
+          <div class="progress-box">
+<div class="progress-box">
+          <div class="progress-bar" id="progressBar" style="width: {{ percent if percent is defined and percent is not none else 0 }}%;"></div>
+</div>      
+</div>
+    </section>
+
+    <!-- STOCK / PRODUCT MANAGEMENT SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2>Product Inventory</h2>
+          <span class="sub-text">View, adjust, and track item stock levels.</span>
+        </div>
+        <a href="{{ url_for('new_product') }}" class="btn primary-btn">+ Add Product</a>
+      </div>
 
       <div class="table-wrap">
-        <table id="stockTable">
-          <tr>
-            <th>Food</th>
-            <th>Icon</th>
-            <th>Food ID</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Add Stock</th>
-            <th>Reduce Stock</th>
-            <th>Remove Product</th>
-          </tr>
+        <table class="product-table" id="stockTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Food ID</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Stock Level</th>
+              <th class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if products %}
+              {% for item in products %}
+              <tr>
+                <td>
+                  <div class="product-cell">
+                    <span class="product-icon">{{ item.icon }}</span>
+                    <span class="product-name">{{ item.name }}</span>
+                  </div>
+                </td>
+                <td><code class="item-id">#{{ item.food_id }}</code></td>
+                <td class="price">KSh {{ item.price }}</td>
+                <td>
+                  {% if item.stock > 10 %}
+                    <span class="badge badge-success">In Stock</span>
+                  {% elif item.stock > 0 %}
+                    <span class="badge badge-warning">Low Stock</span>
+                  {% else %}
+                    <span class="badge badge-danger">Out of Stock</span>
+                  {% endif %}
+                </td>
+                <td><strong>{{ item.stock }}</strong> units</td>
+                <td class="text-right">
+                  <div class="action-buttons">
+                    <form action="{{ url_for('update_stock', id=item.id, action='add') }}" method="POST">
+                      <button type="submit" class="btn icon-btn" title="Add Stock">+</button>
+                    </form>
+                    <form action="{{ url_for('update_stock', id=item.id, action='reduce') }}" method="POST">
+                      <button type="submit" class="btn icon-btn" title="Reduce Stock">-</button>
+                    </form>
+                    <form action="{{ url_for('delete_product', id=item.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this product?');">
+                      <button type="submit" class="btn danger-btn sm-btn" title="Remove Product">Remove</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="6" class="empty-note">No products found. Click "+ Add Product" to get started.</td>
+              </tr>
+            {% endif %}
+          </tbody>
         </table>
       </div>
-
-      <br>
-
-      <!-- ROUTING LOGIC: this button takes the vendor to new-product.html -->
-      <button onclick="goToNewProduct()">+ Add Product</button>
-    </div>
+    </section>
 
   </main>
 
@@ -76,9 +133,11 @@
     Hunger Hunt Vendor Page
   </footer>
 
-  <!-- storage.js MUST come first, Georgie.js uses its functions -->
-  <script src="storage.js"></script>
-  <script src="Georgie.js"></script>
+  <!-- 
+  JS files commented out as requested. Flask handles all routing and data rendering server-side.
+  <script src="{{ url_for('static', filename='js/storage.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/pate.js') }}"></script> 
+  -->
 
 </body>
 

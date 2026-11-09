@@ -201,7 +201,7 @@ def login():
             if endpoint:
                 return redirect(url_for(endpoint))
 
-        return redirect(url_for('auth.landing_page'))
+        return redirect(url_for('auth.main'))
 
     except mysql.connector.Error as e:
         print("LOGIN DB ERROR:", e)
@@ -220,8 +220,8 @@ def logout():
 
 
 @auth_bp.route('/landing')
-def landing_page():
-    return render_template('Landing_page.html')
+def landing():
+    return render_template('main.html')
 
 
 @auth_bp.route('/pate')

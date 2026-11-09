@@ -1,0 +1,222 @@
+/* Same base styling as Hunger Hunt */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: antiquewhite;
+  color: #333;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 6%;
+  background-color: antiquewhite;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.813);
+}
+
+.back-home {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+main {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.description {
+  color: #666;
+  font-size: 17px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.section {
+  background-color: white;
+  width: 100%;
+  max-width: 900px;
+  padding: 35px 25px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 18px;
+  background-color: #00695c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #004d40;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 5px 5px 15px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 15px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+}
+
+.progress-box {
+  width: 100%;
+  max-width: 400px;
+  height: 20px;
+  background-color: #eee;
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 20px;
+  width: 0%;
+  background-color: #00695c;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
+
+/* ---------- NEW: extra styling for the new buttons and pages ---------- */
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.secondary-btn {
+  background-color: white;
+  color: #00695c;
+  border: 2px solid #00695c;
+}
+
+.secondary-btn:hover {
+  background-color: #e0f2f1;
+}
+
+.danger-btn {
+  background-color: #c62828;
+}
+
+.danger-btn:hover {
+  background-color: #8e0000;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.empty-note {
+  text-align: center;
+  color: #777;
+}
+
+.message {
+  color: #c62828;
+  font-weight: bold;
+  min-height: 22px;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #7a5b00;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.status-ready {
+  background-color: #d4edda;
+  color: #1b5e20;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.note-card {
+  background-color: #f5f5f5;
+  border-left: 5px solid #00695c;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+}
+
+.note-date {
+  color: #777;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .section {
+    padding: 25px 15px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

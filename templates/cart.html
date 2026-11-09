@@ -219,8 +219,7 @@
         </div>
 
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="pate.html">Continue Shopping</a>
+            <a href="{{ url_for('auth.landing_page')}}" class="login">Continue Shopping</a>
         </div>
     </header>
 
@@ -286,7 +285,7 @@
                             Browse the Pate Cafeteria menu to get started.
                         </p>
 
-                        <a href="pate.html" class="continue-button">
+                        <a href="{{ url_for('auth.landing_page')}}" class="login">
                             Browse the Menu
                         </a>
                     </div>

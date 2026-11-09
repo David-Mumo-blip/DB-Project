@@ -8,3 +8,4 @@ CREATE TABLE student (
     phone_number varchar(15) NOT NULL,
     registration_date timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) 
+

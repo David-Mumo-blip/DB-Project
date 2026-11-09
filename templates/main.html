@@ -1,34 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Hunger Hunt</title>
     <style>
+        :root {
+            --bg: antiquewhite;
+            --green: #198754;
+            --green-dark: #157347;
+            --ink: #222;
+            --muted: #666;
+            --frame-bg: #f3e9da;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
-            background-color: antiquewhite;
+            background-color: var(--bg);
             color: black;
         }
+
+        /* ---------- Header ---------- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 6%;
-            background-color: antiquewhite;
+            background-color: var(--bg);
             border-bottom: 1px solid #ccc;
         }
+
         .logo {
             font-size: 26px;
             font-weight: bold;
             color: rgba(0, 0, 0, 0.813);
         }
+
         .tagline {
             font-size: 14px;
-            color: #666;
+            color: var(--muted);
             margin-top: 5px;
         }
+
         .nav-links a {
             text-decoration: none;
             color: #333;
@@ -38,101 +57,295 @@
             border-radius: 8px;
             margin-left: 10px;
         }
+
         .nav-links a:hover {
             background-color: #333;
             color: #fff;
         }
+
+        /* ---------- Page ---------- */
         main {
-            padding: 40px 6%;
+            padding: 40px 6% 70px;
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .welcome-banner {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
+
         .welcome-banner h1 {
             font-size: 40px;
             margin-bottom: 10px;
-            color: #222;
+            color: var(--ink);
         }
+
         .welcome-banner p {
             font-size: 18px;
             color: #555;
+            margin: 0;
         }
+
+        /* ---------- Sections ---------- */
+        .section {
+            position: relative;
+            border-radius: 28px;
+            padding: 50px 40px 55px;
+            margin-bottom: 50px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .section.internal {
+            background: linear-gradient(135deg, #ffffff 0%, #fdf3e3 100%);
+            border: 1px solid rgba(25, 135, 84, 0.25);
+        }
+
+        .section.external {
+            background: linear-gradient(135deg, #fff7ec 0%, #f6dcc0 100%);
+            border: 1px solid rgba(176, 96, 32, 0.25);
+        }
+
+        /* soft decorative circles */
+        .section::before,
+        .section::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .section::before {
+            width: 260px;
+            height: 260px;
+            top: -110px;
+            right: -80px;
+        }
+
+        .section::after {
+            width: 180px;
+            height: 180px;
+            bottom: -80px;
+            left: -60px;
+        }
+
+        .section.internal::before,
+        .section.internal::after {
+            background: rgba(25, 135, 84, 0.07);
+        }
+
+        .section.external::before,
+        .section.external::after {
+            background: rgba(176, 96, 32, 0.08);
+        }
+
+        .section-header {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 40px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+        }
+
+        .internal .eyebrow {
+            background: rgba(25, 135, 84, 0.12);
+            color: var(--green-dark);
+        }
+
+        .external .eyebrow {
+            background: rgba(176, 96, 32, 0.14);
+            color: #8a4a14;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            margin: 0 0 12px;
+            color: var(--ink);
+        }
+
+        .section-header p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin: 0;
+        }
+
+        .divider {
+            width: 70px;
+            height: 4px;
+            border-radius: 4px;
+            margin: 18px auto 0;
+        }
+
+        .internal .divider {
+            background: var(--green);
+        }
+
+        .external .divider {
+            background: #c4701f;
+        }
+
+        /* ---------- Cards ---------- */
         .vendors-grid {
+            position: relative;
+            z-index: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
-            max-width: 800px;
+            max-width: 860px;
             margin: 0 auto;
         }
+
         .vendor-card {
+            position: relative;
             background-color: white;
-            border-radius: 15px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .vendor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
         }
-        .vendor-image-placeholder {
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 2;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .internal .badge {
+            background: var(--green);
+        }
+
+        .external .badge {
+            background: #c4701f;
+        }
+
+        /* Image frames: every image in a section sits in an identical box.
+object-fit: contain means nothing is ever cropped. */
+        .vendor-image-frame {
             width: 100%;
-            height: 160px;
-            background-color: #e9ecef;
+            background-color: var(--frame-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
-            font-size: 15px;
-            font-weight: bold;
         }
+
+        .internal .vendor-image-frame {
+            height: 240px;
+        }
+
+        /* smaller */
+        .external .vendor-image-frame {
+            height: 400px;
+        }
+
+        /* bigger */
+
+        .vendor-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
         .vendor-info {
             padding: 20px;
         }
+
         .vendor-name {
             font-size: 22px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
-        .vendor-desc {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-        }
+
         .visit-btn {
             display: inline-block;
             width: 100%;
             padding: 12px 0;
-            background-color: #198754;
+            background-color: var(--green);
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
             transition: background-color 0.2s;
-            box-sizing: border-box;
         }
+
         .visit-btn:hover {
-            background-color: #157347;
+            background-color: var(--green-dark);
+        }
+
+        .menu a{
+            display: inline-block;
+            width: 100%;
+            padding: 12px 0;
+            background-color: var(--green);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            background-color: var(--green-dark);
+        }
+
+        /* ---------- Small screens ---------- */
+        @media (max-width: 700px) {
+            .section {
+                padding: 40px 20px 45px;
+            }
+
+            .vendors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-banner h1 {
+                font-size: 32px;
+            }
+
+            .external .vendor-image-frame {
+                height: 340px;
+            }
         }
     </style>
 </head>
+
 <body>
     <header>
         <div>
             <div class="logo">Hunger Hunt</div>
             <div class="tagline">Student Dashboard</div>
         </div>
+        <!-- <a href="{{ url_for('auth.landing_page')}}" class="login">Back to Home</a>
+            <a href="{{ url_for('auth.cart')}}" class="login">Cart</a> -->
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cart.html">Cart 🛒</a>
+            <a href="{{ url_for('auth.landing_page')}}" class="login">Back to Home</a>
+            <a href="{{url_for ('auth.cart')}}">Cart 🛒</a>
         </div>
     </header>
 
@@ -142,29 +355,96 @@
             <p>Choose your preferred cafeteria or food joint to explore their menu and order meals.</p>
         </div>
 
-        <div class="vendors-grid">
-            <!-- Pate Cafeteria Card -->
-            <div class="vendor-card">
-                <div class="vendor-image-placeholder">
-                    <img src = "{{ url_for('static', filename = 'images/pate.jpeg')}}">
-                </div>
-                <div class="vendor-info">
-                    <div class="vendor-name">Pate Cafeteria</div>
-                    <a href="pate.html" class="visit-btn">View Menu</a>
-                </div>
+        <!-- ================= INTERNAL RESTAURANTS ================= -->
+        <section class="section internal">
+            <div class="section-header">
+                <span class="eyebrow">On Campus</span>
+                <h2>Internal Restaurants</h2>
+                <p>
+                    Right inside the university grounds. Quick to reach between
+                    lectures, so you can grab a hot meal without leaving campus. 
+                </p>
+                <div class="divider"></div>
             </div>
 
-            <!-- Upesi Joint Card -->
-            <div class="vendor-card">
-                <div class="vendor-image-placeholder">
-                    <img src = "{{ url_for('static', filename = 'images/upesi.jpeg')}}">
-</div>
-                <div class="vendor-info">
-                    <div class="vendor-name">Upesi Joint</div>
-                    <a href="upesi.html" class="visit-btn">View Menu</a>
+            <div class="vendors-grid">
+                <div class="vendor-card">
+                    <span class="badge">On Campus</span>
+                    <div class="vendor-image-frame">
+                        <img src="{{ url_for('static', filename='images/pate.jpeg') }}" alt="Pate Cafeteria">
+                    </div>
+                    <div class="vendor-info">
+                        <div class="vendor-name">Pate Cafeteria</div>
+                        <p class="location"><b>LOCATION: </b>2nd Floor STC, straight from the stairs</p>
+                        <p class="cuisine"><b>GENRE: </b>Italian cuisine</p>
+                        <div class="menu">
+                            <a href="{{ url_for('auth.pate')}}" class="login">Explore Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vendor-card">
+                    <span class="badge">On Campus</span>
+                    <div class="vendor-image-frame">
+                        <img src="{{ url_for('static', filename='images/upesi.jpeg') }}" alt="Upesi Joint">
+                    </div>
+                    <div class="vendor-info">
+                        <div class="vendor-name">UPESI joint</div>
+                        <p class="location"><b>LOCATION: </b>2nd Floor STC to the left from the stairs</p>
+                        <p class="cuisine"><b>GENRE: </b>Italian cuisine</p>
+                        <div class="menu">
+                            <a href="{{ url_for('auth.upesi')}}" class="login">Explore Menu</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- ================= EXTERNAL RESTAURANTS ================= -->
+        <section class="section external">
+            <div class="section-header">
+                <span class="eyebrow">Off Campus</span>
+                <h2>External Restaurants</h2>
+                <p>
+                    Local favourites just outside the campus gates. A short walk
+                    away for a change of scene and a different taste.
+                </p>
+                <div class="divider"></div>
+            </div>
+
+            <div class="vendors-grid">
+                <div class="vendor-card">
+                    <span class="badge">Off Campus</span>
+                    <div class="vendor-image-frame">
+                        <img src="{{ url_for('static', filename='images/kireton.jpeg') }}" alt="Kireton Hotel">
+                    </div>
+                    <div class="vendor-info">
+                        <div class="vendor-name">Kireton</div>
+                        <p class="location"><b>LOCATION: </b>Siwaka, opposite Strathmore Gate A</p>
+                        <p class="cuisine"><b>GENRE: </b>Local casual dining </p>
+                        <div class="menu">
+                            <a href="{{ url_for('auth.kerinton')}}" class="login">Explore Menu</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vendor-card">
+                    <span class="badge">Off Campus</span>
+                    <div class="vendor-image-frame">
+                        <img src="{{ url_for('static', filename='images/georgie.jpeg') }}" alt="Georgie's Cafeteria">
+                    </div>
+                    <div class="vendor-info">
+                        <div class="vendor-name">Georgie</div>
+                        <p class="location"><b>LOCATION: </b>Siwaka, opposite Sleezy's</p>
+                        <p class="cuisine"><b>GENRE: </b>Standard local cuisine</p>
+                        <div class="menu">
+                            <a href="{{ url_for('auth.georgies')}}" class="login">Explore menu</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 </body>
+
 </html>

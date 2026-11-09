@@ -60,18 +60,57 @@
         }
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 25px;
         }
-        .no-items {
-            text-align: center;
-            color: #666;
-            font-size: 18px;
-            grid-column: 1 / -1;
-            padding: 40px 0;
+        /* Empty Card Box Structure for Future Database Items */
+        .food-card {
             background-color: white;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .food-image-placeholder {
+            width: 100%;
+            height: 160px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .food-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .food-price {
+            color: #198754;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #198754;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .add-btn:hover {
+            background-color: #157347;
         }
     </style>
 </head>
@@ -82,8 +121,8 @@
             <div class="tagline">Student Vendor Portal</div>
         </div>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cart.html">Cart 🛒</a>
+            <a href="{{ url_for('auth.landing_page')}}" class="login">Back to Home</a>
+            <a href="{{ url_for('auth.cart')}}" class="login">Cart</a>
         </div>
     </header>
 
@@ -95,9 +134,30 @@
 
         <!-- Dynamic Menu Container for DB Integration -->
         <div id="menu" class="menu-grid">
-            <div class="no-items">
-                No items currently listed. Georgies owners will update their menu here soon!
+            <!-- Card Box 1 Template -->
+            <div class="food-card">
+                <img src="{{ url_for('static', filename='images/smocha.jpeg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Smocha</div>
+                <div class="food-price">KSh 70.00</div>
+                <button class="add-btn">Add to Cart</button>
             </div>
+
+            <!-- Card Box 2 Template -->
+            <div class="food-card">
+                <img src="{{ url_for('static', filename='images/egg.jpeg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Mayai Pasua</div>
+                <div class="food-price">KSh 30.00</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <!-- Card Box 3 Template -->
+            <div class="food-card">
+                <img src="{{ url_for('static', filename='images/smokie.jpeg') }}" alt="Georgie's Cafeteria">
+                <div class="food-name">Smokie Pasua</div>
+                <div class="food-price">KSh 40.00</div>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
         </div>
     </main>
 </body>

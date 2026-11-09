@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kerinton Vendor Page - Hunger Hunt</title>
+
+  <!-- All the styling lives in style.css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Hunger Hunt</div>
+
+    <div class="header-buttons">
+      
+      <!-- ROUTING LOGIC: this button takes the vendor to the Orders page -->
+      <button id="ordersButton" onclick="goToOrders()">Orders</button>
+      <a class="back-home" href="#">Back to Home</a>
+    </div>
+  </header>
+
+  <main>
+
+    <h1>Kerinton Vendor Dashboard</h1>
+    <p class="description">Manage your food stock, orders, revenue and goal.</p>
+
+    <!-- REVENUE SECTION -->
+    <div class="section">
+      <h2>Money Made</h2>
+
+      <p>Revenue: KSh <span id="revenue">0</span></p>
+
+      <input type="number" id="goalInput" placeholder="Enter revenue goal">
+      <button onclick="setGoal()">Set Goal</button>
+
+      <p>Goal: KSh <span id="goal">0</span></p>
+      <p>You have made <span id="percent">0</span>% of your goal.</p>
+
+      <div class="progress-box">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- STOCK SECTION -->
+    <div class="section">
+      <h2>My Stock</h2>
+
+      <div class="table-wrap">
+        <table id="stockTable">
+          <tr>
+            <th>Food</th>
+            <th>Icon</th>
+            <th>Food ID</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Add Stock</th>
+            <th>Reduce Stock</th>
+            <th>Remove Product</th>
+          </tr>
+        </table>
+      </div>
+
+      <br>
+
+      <!-- ROUTING LOGIC: this button takes the vendor to new-product.html -->
+      <button onclick="goToNewProduct()">+ Add Product</button>
+    </div>
+
+  </main>
+
+  <footer>
+    Hunger Hunt Vendor Page
+  </footer>
+
+  <!-- storage.js MUST come first, Kerinton.js uses its functions -->
+  <script src="storage.js"></script>
+  <script src="Kerinton.js"></script>
+
+</body>
+
+</html>

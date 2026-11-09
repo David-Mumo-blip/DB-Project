@@ -1,17 +1,41 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from routes.passwords import hash_password, verify_password  
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
+from routes.passwords import hash_password, verify_password
+from functools import wraps
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 from db import get_db
 import mysql.connector
 
-VALID_ROLES = ('student' , 'vendor')
+VALID_ROLES = ('student', 'vendor')
 
-VENDOR_HOME = {1:'vendor.pate', 2: 'vendor.kilimanjaro'}
+# Maps a vendor's overall_id to the endpoint they should land on.
+# Empty for now, so vendors go to the landing page until their pages exist.
+VENDOR_HOME = { 5: 'auth.pate_vendor',     
+    6: 'auth.georgie_vendor',   
+    7: 'auth.upesi_vendor',     
+    8: 'auth.kerinton_vendor',}
+
+def vendor_only(expected_vendor_id):
+    """Allow only the logged-in vendor whose overall_id matches."""
+    def decorator(view):
+        @wraps(view)
+        def wrapped(*args, **kwargs):
+            if 'user_id' not in session:
+                flash('Please log in to continue.', 'error')
+                return redirect(url_for('auth.login'))
+            if (session.get('role') != 'vendor'
+                    or session.get('vendor_id') != expected_vendor_id):
+                abort(403)
+            return view(*args, **kwargs)
+        return wrapped
+    return decorator
+
+
 @auth_bp.route('/role')
 def role():
     """ Choose a role before registration"""
     return render_template('role.html')
+
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -138,10 +162,7 @@ def register():
     return redirect(url_for('auth.login'))
 
 
-
-
-
-@auth_bp.route('/login', methods = ['GET', 'POST'])
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -157,10 +178,10 @@ def login():
     cursor = None
 
     try:
-        cursor = db.cursor(dictionary = True)
+        cursor = db.cursor(dictionary=True)
 
         cursor.execute(
-            """ 
+            """
             SELECT id, name, email, password_hash, role
             FROM users
             WHERE email = %s
@@ -179,11 +200,13 @@ def login():
         vendor_id = None
 
         if user['role'] == 'vendor':
+            # Find the vendor profile that belongs to this user account.
+            # NOTE: we select overall_id (what we read below), not user_id.
             cursor.execute(
                 """
-                SELECT vendor_id
-                FROM vendor_specific
-                WHERE overall_id = %s
+                SELECT overall_id, status
+                FROM vendor_overall
+                WHERE user_id = %s
                 LIMIT 1
                 """,
                 (user['id'],)
@@ -194,10 +217,11 @@ def login():
                 flash("Your vendor profile is unavailable.", 'error')
                 return render_template('login.html'), 403
 
-            vendor_id = vendor['id']
+            if vendor['status'] != 'approved':
+                flash("Your vendor application is still under review.", 'error')
+                return render_template('login.html'), 403
 
-            # Remember to return to add checks on vendor's approval statuses.
-
+            vendor_id = vendor['overall_id']
 
         session.clear()
         session['user_id'] = user['id']
@@ -205,22 +229,18 @@ def login():
         session['role'] = user['role']
 
         if vendor_id is not None:
-                session['vendor_id'] = vendor_id
+            session['vendor_id'] = vendor_id
 
-        if user['role']== 'vendor':
-                endpoint = VENDOR_HOME.get(vendor_id)
-
-                if endpoint:
-                    return redirect(url_for(endpoint))
-
-                return redirect(url_for('auth.landing_page'))
+            endpoint = VENDOR_HOME.get(vendor_id)
+            if endpoint:
+                return redirect(url_for(endpoint))
 
         return redirect(url_for('auth.landing_page'))
 
     except mysql.connector.Error as e:
         print("LOGIN DB ERROR:", e)
         db.rollback()
-        flash('A database error occured. Please try again')
+        flash('A database error occurred. Please try again.', 'error')
         return render_template('login.html'), 500
 
     finally:
@@ -234,27 +254,56 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
 @auth_bp.route('/landing')
 def landing_page():
     return render_template('Landing_page.html')
+
 
 @auth_bp.route('/pate')
 def pate():
     return render_template('pate.html')
 
+
 @auth_bp.route('/upesi')
 def upesi():
     return render_template('upesi.html')
+
 
 @auth_bp.route('/kerinton')
 def kerinton():
     return render_template('kerinton.html')
 
+
 @auth_bp.route('/georgies')
 def georgies():
     return render_template('georgies.html')
 
+
 @auth_bp.route('/cart')
 def cart():
     return render_template('cart.html')
-        
+
+
+@auth_bp.route('/vendor/pate')
+@vendor_only(5)
+def pate_vendor():
+    return render_template('patevv.html')
+
+
+@auth_bp.route('/vendor/georgie')
+@vendor_only(6)
+def georgie_vendor():
+    return render_template('georgievv.html')
+
+
+@auth_bp.route('/vendor/upesi')
+@vendor_only(7)
+def upesi_vendor():
+    return render_template('upesivv.html')
+
+
+@auth_bp.route('/vendor/kerinton')
+@vendor_only(8)
+def kerinton_vendor():
+    return render_template('kerintonvv.html')

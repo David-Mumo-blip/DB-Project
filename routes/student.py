@@ -59,17 +59,17 @@ def pate():
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("""SELECT id, food_name, price, quantity_available
-    FROM menu_items
+    FROM food
     WHERE vendor_id = 1""")
 
-    menu_items = cursor.fetchall()
+    food = cursor.fetchall()
 
-    print("MENU ITEMS:", menu_items)
+    print("MENU ITEMS:", food)
 
     cursor.close()
     db.close()
 
-    return render_template('pate.html', menu_items=menu_items, balance=get_student_balance())
+    return render_template('pate.html', food=food, balance=get_student_balance())
 
 
 @student_bp.route('/upesi')
@@ -81,12 +81,12 @@ def upesi():
     try:
         cursor.execute("""
             SELECT id, food_name, price, quantity_available
-            FROM menu_items
+            FROM food
             WHERE vendor_id = 2
             ORDER BY id
         """)
 
-        menu_items = cursor.fetchall()
+        food = cursor.fetchall()
 
     finally:
         cursor.close()
@@ -94,7 +94,7 @@ def upesi():
 
     return render_template(
         'upesi.html',
-        menu_items=menu_items,
+        food=food,
         balance=get_student_balance()
     )
 
@@ -109,12 +109,12 @@ def kerinton():
     try:
         cursor.execute("""
             SELECT id, food_name, price, quantity_available
-            FROM menu_items
+            FROM food
             WHERE vendor_id = 2
             ORDER BY id
         """)
 
-        menu_items = cursor.fetchall()
+        food = cursor.fetchall()
 
     finally:
         cursor.close()
@@ -122,7 +122,7 @@ def kerinton():
 
     return render_template(
         'kerinton.html',
-        menu_items=menu_items,
+        food=food,
         balance=get_student_balance()
     )
 
@@ -137,12 +137,12 @@ def georgie():
     try:
         cursor.execute("""
             SELECT id, food_name, price, quantity_available
-            FROM menu_items
+            FROM food
             WHERE vendor_id = 2
             ORDER BY id
         """)
 
-        menu_items = cursor.fetchall()
+        food = cursor.fetchall()
 
     finally:
         cursor.close()
@@ -150,7 +150,7 @@ def georgie():
 
     return render_template(
         'georgies.html',
-        menu_items=menu_items,
+        food=food,
         balance=get_student_balance()
     )
 

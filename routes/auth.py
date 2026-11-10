@@ -36,6 +36,9 @@ def role():
     """ Choose a role before registration"""
     return render_template('role.html')
 
+@auth_bp.route('/landing')
+def landing():
+    return render_template('main.html')
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])

@@ -134,29 +134,14 @@
 
         <!-- Dynamic Menu Container: Template boxes ready for database integration -->
         <div id="menu" class="menu-grid">
-            <!-- Card Box 1 Template -->
+            {% for item in products %}
             <div class="food-card">
-                <img src="{{ url_for('static', filename='images/chapo.jpg') }}" alt="Georgie's Cafeteria">
-                <div class="food-name">Chapati</div>
-                <div class="food-price">KSh 20.00</div>
+                <img src="{{ url_for('static', filename='images/' + (item.image_filename or 'image1.jpeg')) }}" alt="{{ item.vendor_product }}">
+                <div class="food-name">{{ item.vendor_product }}</div>
+                <div class="food-price">KSh {{ "{:,.2f}".format(item.vendor_price) }}</div>
                 <button class="add-btn">Add to Cart</button>
             </div>
-
-            <!-- Card Box 2 Template -->
-            <div class="food-card">
-                <img src="{{ url_for('static', filename='images/samosa.jpeg') }}" alt="Georgie's Cafeteria">
-                <div class="food-name">Samosa</div>
-                <div class="food-price">KSh 50.00</div>
-                <button class="add-btn">Add to Cart</button>
-            </div>
-
-            <!-- Card Box 3 Template -->
-            <div class="food-card">
-                <img src="{{ url_for('static', filename='images/mandazi.jpeg') }}" alt="Georgie's Cafeteria">
-                <div class="food-name">Mandazi</div>
-                <div class="food-price">KSh 10.00</div>
-                <button class="add-btn">Add to Cart</button>
-            </div>
+            {% endfor %}
         </div>
     </main>
 </body>

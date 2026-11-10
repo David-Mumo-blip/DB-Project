@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash,session,abort
 student_bp = Blueprint('student', __name__, url_prefix='/student')
 from functools import wraps
+from routes.guards import login_required
+from db import get_db
+
 
 VENDOR_HOME = { 5: 'auth.pate_vendor',     
     6: 'auth.georgie_vendor',   
@@ -22,6 +25,26 @@ def vendor_only(expected_vendor_id):
         return wrapped
     return decorator
 
+def get_student_balance():
+    user_id = session.get('user_id')
+
+    if not user_id or session.get('role') != 'student':
+        return None
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        cursor.execute(
+            "SELECT balance FROM users WHERE id = %s",
+            (user_id,)
+        )
+        user = cursor.fetchone()
+        return user['balance'] if user else None
+    finally:
+        cursor.close()
+        conn.close()
+
 
 
 @student_bp.route('/landing')
@@ -30,23 +53,107 @@ def landing():
 
 
 @student_bp.route('/pate')
+@login_required
 def pate():
-    return render_template('pate.html')
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("""SELECT id, food_name, price, quantity_available
+    FROM menu_items
+    WHERE vendor_id = 1""")
+
+    menu_items = cursor.fetchall()
+
+    print("MENU ITEMS:", menu_items)
+
+    cursor.close()
+    db.close()
+
+    return render_template('pate.html', menu_items=menu_items, balance=get_student_balance())
 
 
 @student_bp.route('/upesi')
+@login_required
 def upesi():
-    return render_template('upesi.html')
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT id, food_name, price, quantity_available
+            FROM menu_items
+            WHERE vendor_id = 2
+            ORDER BY id
+        """)
+
+        menu_items = cursor.fetchall()
+
+    finally:
+        cursor.close()
+        db.close()
+
+    return render_template(
+        'upesi.html',
+        menu_items=menu_items,
+        balance=get_student_balance()
+    )
+
 
 
 @student_bp.route('/kerinton')
+@login_required
 def kerinton():
-    return render_template('kerinton.html')
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT id, food_name, price, quantity_available
+            FROM menu_items
+            WHERE vendor_id = 2
+            ORDER BY id
+        """)
+
+        menu_items = cursor.fetchall()
+
+    finally:
+        cursor.close()
+        db.close()
+
+    return render_template(
+        'kerinton.html',
+        menu_items=menu_items,
+        balance=get_student_balance()
+    )
 
 
-@student_bp.route('/georgies')
-def georgies():
-    return render_template('georgies.html')
+
+@student_bp.route('/georgie')
+@login_required
+def georgie():
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        cursor.execute("""
+            SELECT id, food_name, price, quantity_available
+            FROM menu_items
+            WHERE vendor_id = 2
+            ORDER BY id
+        """)
+
+        menu_items = cursor.fetchall()
+
+    finally:
+        cursor.close()
+        db.close()
+
+    return render_template(
+        'georgies.html',
+        menu_items=menu_items,
+        balance=get_student_balance()
+    )
+
 
 
 @student_bp.route('/cart')

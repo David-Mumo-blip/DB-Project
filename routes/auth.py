@@ -8,23 +8,15 @@ import mysql.connector
 
 VALID_ROLES = ('student', 'vendor')
 
-# Maps a vendor's overall_id to the endpoint they should land on.
-# Empty for now, so vendors go to the landing page until their pages exist.
-VENDOR_HOME = { 5: 'auth.pate_vendor',     
-    6: 'auth.georgie_vendor',   
-    7: 'auth.upesi_vendor',     
-    8: 'auth.kerinton_vendor',}
-
-def vendor_only(expected_vendor_id):
-    """Allow only the logged-in vendor whose overall_id matches."""
+def vendor_only():
+    """Allow only logged-in vendors."""
     def decorator(view):
         @wraps(view)
         def wrapped(*args, **kwargs):
             if 'user_id' not in session:
                 flash('Please log in to continue.', 'error')
                 return redirect(url_for('auth.login'))
-            if (session.get('role') != 'vendor'
-                    or session.get('vendor_id') != expected_vendor_id):
+            if session.get('role') != 'vendor' or not session.get('vendor_id'):
                 abort(403)
             return view(*args, **kwargs)
         return wrapped
@@ -35,10 +27,6 @@ def vendor_only(expected_vendor_id):
 def role():
     """ Choose a role before registration"""
     return render_template('role.html')
-
-@auth_bp.route('/landing')
-def landing():
-    return render_template('main.html')
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -149,8 +137,6 @@ def login():
     cursor = db.cursor(dictionary=True)
     
     try:
-        cursor = db.cursor(dictionary=True)
-
         cursor.execute(
             """
             SELECT id, name, email, password_hash, role
@@ -170,12 +156,10 @@ def login():
 
         # 2. Extract Profile Identifiers based on Role
         if user['role'] == 'vendor':
-            # Find the vendor profile that belongs to this user account.
-            # NOTE: we select overall_id (what we read below), not user_id.
             cursor.execute(
                 """
-                SELECT overall_id, status
-                FROM vendor_overall
+                SELECT id, approval_status
+                FROM vendors
                 WHERE user_id = %s
                 LIMIT 1
                 """,
@@ -187,11 +171,11 @@ def login():
                 flash("Your vendor profile is unavailable.", 'error')
                 return render_template('login.html'), 403
 
-            if vendor['status'] != 'approved':
+            if vendor['approval_status'] != 'approved':
                 flash("Your vendor application is still under review.", 'error')
                 return render_template('login.html'), 403
 
-            vendor_id = vendor['overall_id']
+            vendor_id = vendor['id']
 
         session.clear()
         session['user_id'] = user['id']
@@ -200,10 +184,7 @@ def login():
 
         if vendor_id is not None:
             session['vendor_id'] = vendor_id
-
-            endpoint = VENDOR_HOME.get(vendor_id)
-            if endpoint:
-                return redirect(url_for(endpoint))
+            return redirect(url_for('vendor.dashboard'))
 
         return redirect(url_for('student.landing'))
 
@@ -221,5 +202,3 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
-
-

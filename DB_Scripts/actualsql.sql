@@ -104,21 +104,21 @@ INSERT INTO vendors (id, user_id, name, location_description, campus_status, app
 -- Insert Menu Items (3 items per vendor, stock = 20)
 INSERT INTO menu_items (vendor_id, food_name, price, category, availability_status, quantity_available, image_filename) VALUES
     -- Pate (vendor_id = 1)
-    (1, 'Chapati', 20.00, 'main_course', 'available', 20, 'image1.jpeg'),
-    (1, 'Samosa', 50.00, 'appetizer', 'available', 20, 'image2.jpeg'),
-    (1, 'Mandazi', 10.00, 'dessert', 'available', 20, 'image3.jpeg'),
+    (1, 'Chapati', 20.00, 'main_course', 'available', 20, 'chapo.jpg'),
+    (1, 'Samosa', 50.00, 'appetizer', 'available', 20, 'samosa.jpeg'),
+    (1, 'Mandazi', 10.00, 'dessert', 'available', 20, 'mandazi.jpeg'),
 
     -- Georgies (vendor_id = 2)
-    (2, 'Smocha', 70.00, 'main_course', 'available', 20, 'image1.jpeg'),
-    (2, 'Mayai Pasua', 30.00, 'appetizer', 'available', 20, 'image2.jpeg'),
-    (2, 'Smokie Pasua', 40.00, 'appetizer', 'available', 20, 'image3.jpeg'),
+    (2, 'Smocha', 70.00, 'main_course', 'available', 20, 'smocha.jpeg'),
+    (2, 'Mayai Pasua', 30.00, 'appetizer', 'available', 20, 'egg.jpeg'),
+    (2, 'Smokie Pasua', 40.00, 'appetizer', 'available', 20, 'smokie.jpeg'),
 
     -- Kerinton (vendor_id = 3)
-    (3, 'Bhajia', 70.00, 'appetizer', 'available', 20, 'image1.jpeg'),
-    (3, 'Fried Chicken', 250.00, 'main_course', 'available', 20, 'image2.jpeg'),
-    (3, 'Fresh juice', 70.00, 'beverage', 'available', 20, 'image3.jpeg'),
+    (3, 'Bhajia', 70.00, 'appetizer', 'available', 20, 'bhajia.jpeg'),
+    (3, 'Fried Chicken', 250.00, 'main_course', 'available', 20, 'chicken.jpeg'),
+    (3, 'Fresh juice', 70.00, 'beverage', 'available', 20, 'juice.jpeg'),
 
     -- Upesi Joint (vendor_id = 4)
-    (4, 'Pilau', 100.00, 'main_course', 'available', 20, 'image1.jpeg'),
-    (4, 'Chicken stew', 150.00, 'main_course', 'available', 20, 'image2.jpeg'),
-    (4, 'Chips', 100.00, 'main_course', 'available', 20, 'image3.jpeg');
+    (4, 'Pilau', 100.00, 'main_course', 'available', 20, 'pilau.jpeg'),
+    (4, 'Chicken stew', 150.00, 'main_course', 'available', 20, 'chickenstew.jpeg'),
+    (4, 'Chips', 100.00, 'main_course', 'available', 20, 'fries.jpeg');

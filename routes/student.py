@@ -103,8 +103,130 @@ def view_vendor(vendor_id):
 
 @student_bp.route('/cart')
 def cart():
-    return render_template('cart.html')
+    cart_items = session.get('cart', {})
+    total = sum(item['price'] * item['quantity'] for item in cart_items.values())
+    return render_template('cart.html', cart_items=cart_items, total=total)
 
+@student_bp.route('/cart/add/<int:item_id>', methods=['POST'])
+def add_to_cart(item_id):
+    # Ensure user is logged in as a student
+    if 'user_id' not in session or session.get('role') != 'student':
+        flash('Please log in as a student to add items to your cart.', 'error')
+        return redirect(url_for('auth.login'))
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    try:
+        # Fetch the menu item
+        cursor.execute("SELECT * FROM menu_items WHERE id = %s", (item_id,))
+        item = cursor.fetchone()
+
+        if not item or item['availability_status'] != 'available':
+            flash('Item is unavailable.', 'error')
+            return redirect(url_for('student.landing'))
+
+        # Initialize cart in session if it doesn't exist
+        if 'cart' not in session:
+            session['cart'] = {}
+
+        cart = session['cart']
+        item_id_str = str(item_id)
+
+        # If item already in cart, increment quantity; otherwise add it
+        if item_id_str in cart:
+            cart[item_id_str]['quantity'] += 1
+        else:
+            cart[item_id_str] = {
+                'id': item['id'],
+                'vendor_id': item['vendor_id'],
+                'food_name': item['food_name'],
+                'price': float(item['price']),
+                'quantity': 1,
+                'image_filename': item['image_filename']
+            }
+
+        session.modified = True
+        flash(f"Added {item['food_name']} to your cart!", 'success')
+        
+        # Redirect back to the vendor's menu page
+        return redirect(url_for('student.view_vendor', vendor_id=item['vendor_id']))
+
+    finally:
+        cursor.close()
+        db.close()
+
+
+@student_bp.route('/cart/checkout', methods=['POST'])
+def checkout():
+    if 'user_id' not in session or session.get('role') != 'student':
+        flash('Please log in to checkout.', 'error')
+        return redirect(url_for('auth.login'))
+
+    cart = session.get('cart', {})
+    if not cart:
+        flash('Your cart is empty.', 'error')
+        return redirect(url_for('student.cart'))
+
+    user_id = session['user_id']
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        # Get student_id and current wallet balance
+        cursor.execute("SELECT student_id, balance FROM students WHERE user_id = %s", (user_id,))
+        student = cursor.fetchone()
+        
+        if not student:
+            flash('Student profile not found.', 'error')
+            return redirect(url_for('student.cart'))
+
+        student_id = student['student_id']
+        balance = student['balance']
+
+        # Calculate total order amount
+        total_amount = sum(item['price'] * item['quantity'] for item in cart.values())
+
+        if balance < total_amount:
+            flash('Insufficient wallet balance to complete this order.', 'error')
+            return redirect(url_for('student.cart'))
+
+        # Deduct balance
+        new_balance = balance - total_amount
+        cursor.execute("UPDATE students SET balance = %s WHERE student_id = %s", (new_balance, student_id))
+
+        # Insert orders and payments for each cart item
+        for item in cart.values():
+            cursor.execute(
+                """
+                INSERT INTO orders (customer_id, vendor_id, food_id, total_amount, status)
+                VALUES (%s, %s, %s, %s, 'pending')
+                """,
+                (student_id, item['vendor_id'], item['id'], item['price'] * item['quantity'])
+            )
+            order_id = cursor.lastrowid
+
+            cursor.execute(
+                """
+                INSERT INTO payments (order_id, amount, payment_method, payment_status)
+                VALUES (%s, %s, 'wallet', 'completed')
+                """,
+                (order_id, item['price'] * item['quantity'])
+            )
+
+        db.commit()
+        
+        # Clear the cart after successful checkout
+        session.pop('cart', None)
+        flash('Order placed successfully! Payment completed via wallet.', 'success')
+        return redirect(url_for('student.landing'))
+
+    except Exception as e:
+        db.rollback()
+        flash(f'Checkout failed: {str(e)}', 'error')
+        return redirect(url_for('student.cart'))
+    finally:
+        cursor.close()
+        db.close()
 
 @student_bp.route('/vendor/pate')
 @vendor_only(5)

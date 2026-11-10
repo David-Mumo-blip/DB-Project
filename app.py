@@ -1,4 +1,8 @@
 from flask import Flask, render_template, jsonify
+from routes.extensions import mysql
+from db import get_db
+
+app = Flask(__name__)
 
 try:
     import config
@@ -8,19 +12,13 @@ except ImportError:
         "and put your MySQL password in it."
     )
 
-from db import get_db
-from routes.auth import auth_bp
-from routes.admin import admin_bp
-from routes.vendor import vendor_bp
-from routes.student import student_bp
 
-app = Flask(__name__)
+
+
 app.secret_key = config.SECRET_KEY
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(admin_bp)
-app.register_blueprint(vendor_bp)
-app.register_blueprint(student_bp)
+
+
 
 
 @app.route('/')
@@ -40,6 +38,15 @@ def health():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+
+from routes.auth import auth_bp
+from routes.admin import admin_bp
+from routes.vendor import vendor_bp
+from routes.student import student_bp
+app.register_blueprint(auth_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(vendor_bp)
+app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)

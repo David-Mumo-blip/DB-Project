@@ -22,8 +22,7 @@ CREATE TABLE users (
 CREATE TABLE students (
     student_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
-	balance DECIMAL(10, 2) NOT NULL DEFAULT 1000.00
-
+	balance DECIMAL(10, 2) NOT NULL DEFAULT 1000.00,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -35,6 +34,7 @@ CREATE TABLE vendors (
     location_description VARCHAR(255) NULL,
     campus_status ENUM('on-campus', 'off-campus') NOT NULL,
     approval_status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'approved',
+    image_filename VARCHAR(255) NOT NULL DEFAULT 'default_vendor.jpeg',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -95,11 +95,11 @@ INSERT INTO users (id, name, email, password_hash, role) VALUES
 INSERT INTO students (user_id) VALUES (1);
 
 -- Insert Master Vendors
-INSERT INTO vendors (id, user_id, name, location_description, campus_status, approval_status) VALUES
-    (1, 2, 'Pate Cafeteria', 'STC first floor', 'on-campus', 'approved'),
-    (2, 3, 'Georgies', 'STC rooftop', 'on-campus', 'approved'),
-    (3, 4, 'Kerinton', 'Student Center', 'on-campus', 'approved'),
-    (4, 5, 'Upesi Joint', 'Main Gate', 'on-campus', 'approved');
+INSERT INTO vendors (id, user_id, name, location_description, campus_status, approval_status, image_filename) VALUES
+    (1, 2, 'Pate Cafeteria', 'STC first floor', 'on-campus', 'approved', 'pate.jpeg'),
+    (2, 3, 'Georgies', 'Siwaka', 'off-campus', 'approved', 'georgies.jpeg'),
+    (3, 4, 'Kireton', 'Near Siwaka', 'off-campus', 'approved', 'kireton.jpeg'),
+    (4, 5, 'Upesi Joint', 'STC First floor', 'on-campus', 'approved', 'upesi.jpeg');
 
 -- Insert Menu Items (3 items per vendor, stock = 20)
 INSERT INTO menu_items (vendor_id, food_name, price, category, availability_status, quantity_available, image_filename) VALUES

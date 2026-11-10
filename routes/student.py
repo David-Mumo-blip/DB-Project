@@ -1,14 +1,16 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash,session,abort
-student_bp = Blueprint('student', __name__, url_prefix='/student')
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
 from functools import wraps
 from routes.guards import login_required
 from db import get_db
 
+student_bp = Blueprint('student', __name__, url_prefix='/student')
 
-VENDOR_HOME = { 5: 'auth.pate_vendor',     
+VENDOR_HOME = { 
+    5: 'auth.pate_vendor',    
     6: 'auth.georgie_vendor',   
-    7: 'auth.upesi_vendor',     
-    8: 'auth.kerinton_vendor',}
+    7: 'auth.upesi_vendor',    
+    8: 'auth.kerinton_vendor',
+}
 
 def vendor_only(expected_vendor_id):
     """Allow only the logged-in vendor whose overall_id matches."""
@@ -46,114 +48,57 @@ def get_student_balance():
         conn.close()
 
 
-
 @student_bp.route('/landing')
 def landing():
-    return render_template('main.html')
-
-
-@student_bp.route('/pate')
-@login_required
-def pate():
     db = get_db()
     cursor = db.cursor(dictionary=True)
-
-    cursor.execute("""SELECT id, food_name, price, quantity_available
-    FROM food
-    WHERE vendor_id = 1""")
-
-    food = cursor.fetchall()
-
-    print("MENU ITEMS:", food)
-
-    cursor.close()
-    db.close()
-
-    return render_template('pate.html', food=food, balance=get_student_balance())
-
-
-@student_bp.route('/upesi')
-@login_required
-def upesi():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
+    
     try:
-        cursor.execute("""
-            SELECT id, food_name, price, quantity_available
-            FROM food
-            WHERE vendor_id = 2
-            ORDER BY id
-        """)
+        # Fetch all approved vendors from the database
+        cursor.execute("SELECT * FROM vendors WHERE approval_status = 'approved'")
+        vendors = cursor.fetchall()
+        
+        print("DEBUG - VENDORS FROM DB: ", vendors)
+        
+        # Separate them to match your template's On-Campus vs Off-Campus sections
+        internal_vendors = [v for v in vendors if v['campus_status'] == 'on-campus']
+        external_vendors = [v for v in vendors if v['campus_status'] == 'off-campus']
 
-        food = cursor.fetchall()
-
+        if not vendors:
+            internal_vendors = []
+            external_vendors = []
+            
+        return render_template('main.html', internal_vendors=internal_vendors, external_vendors=external_vendors)
     finally:
         cursor.close()
         db.close()
 
-    return render_template(
-        'upesi.html',
-        food=food,
-        balance=get_student_balance()
-    )
 
-
-
-@student_bp.route('/kerinton')
-@login_required
-def kerinton():
+@student_bp.route('/vendor/<int:vendor_id>')
+def view_vendor(vendor_id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
     try:
-        cursor.execute("""
-            SELECT id, food_name, price, quantity_available
-            FROM food
-            WHERE vendor_id = 2
-            ORDER BY id
-        """)
+        cursor.execute(
+            "SELECT * FROM vendors WHERE id = %s",
+            (vendor_id,)
+        )
+        vendor = cursor.fetchone()
 
-        food = cursor.fetchall()
+        if not vendor:
+            abort(404)
 
+        cursor.execute(
+            "SELECT * FROM menu_items WHERE vendor_id = %s",
+            (vendor_id,)
+        )
+        products = cursor.fetchall()
+
+        return render_template('vendor_menu.html', vendor=vendor, products=products)
     finally:
         cursor.close()
         db.close()
-
-    return render_template(
-        'kerinton.html',
-        food=food,
-        balance=get_student_balance()
-    )
-
-
-
-@student_bp.route('/georgie')
-@login_required
-def georgie():
-    db = get_db()
-    cursor = db.cursor(dictionary=True)
-
-    try:
-        cursor.execute("""
-            SELECT id, food_name, price, quantity_available
-            FROM food
-            WHERE vendor_id = 2
-            ORDER BY id
-        """)
-
-        food = cursor.fetchall()
-
-    finally:
-        cursor.close()
-        db.close()
-
-    return render_template(
-        'georgies.html',
-        food=food,
-        balance=get_student_balance()
-    )
-
 
 
 @student_bp.route('/cart')

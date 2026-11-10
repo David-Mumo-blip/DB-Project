@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ vendor.name }} - Hunger Hunt</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: antiquewhite;
+            color: black;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 6%;
+            background-color: antiquewhite;
+            border-bottom: 1px solid #ccc;
+        }
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.813);
+        }
+        .tagline {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+        .nav-links a:hover {
+            background-color: #333;
+            color: #fff;
+        }
+        main {
+            padding: 40px 6%;
+        }
+        .vendor-banner {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .vendor-banner h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        .vendor-banner p {
+            font-size: 18px;
+            color: #555;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+        .food-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .food-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+        .food-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .food-price {
+            color: #198754;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .stock-info {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #198754;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .add-btn:hover {
+            background-color: #157347;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <div class="logo">Hunger Hunt</div>
+            <div class="tagline">Student Vendor Portal</div>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('student.landing')}}" class="login">Back to Home</a>
+            <a href="{{ url_for('student.cart')}}" class="login">Cart</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="vendor-banner">
+            <!-- Dynamically displays whichever vendor's page was clicked -->
+            <h1>{{ vendor.name }}</h1>
+            <p>Explore delicious meals available from {{ vendor.name }} ({{ vendor.location_description }})</p>
+        </div>
+
+        <div id="menu" class="menu-grid">
+            {% for item in products %}
+            <div class="food-card">
+                <img src="{{ url_for('static', filename='images/' + item.image_filename) }}" alt="{{ item.food_name }}">
+                <div class="food-name">{{ item.food_name }}</div>
+                <div class="food-price">KSh {{ "{:,.2f}".format(item.price) }}</div>
+                <div class="stock-info">Available Stock: {{ item.quantity_available }}</div>
+                
+                <form action="{{ url_for('student.add_to_cart', item_id=item.id) }}" method="POST">
+                    <button type="submit" class="add-btn">Add to Cart</button>
+                </form>
+            </div>
+            {% else %}
+            <p style="grid-column: 1 / -1; text-align: center; color: #555;">No menu items currently available for this vendor.</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

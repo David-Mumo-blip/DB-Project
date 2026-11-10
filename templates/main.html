@@ -356,95 +356,64 @@ object-fit: contain means nothing is ever cropped. */
             <p>Choose your preferred cafeteria or food joint to explore their menu and order meals.</p>
         </div>
 
-        <!-- ================= INTERNAL RESTAURANTS ================= -->
-        <section class="section internal">
-            <div class="section-header">
-                <span class="eyebrow">On Campus</span>
-                <h2>Internal Restaurants</h2>
-                <p>
-                    Right inside the university grounds. Quick to reach between
-                    lectures, so you can grab a hot meal without leaving campus. 
-                </p>
-                <div class="divider"></div>
+  <!-- ================= INTERNAL RESTAURANTS ================= -->
+<section class="section internal">
+    <div class="section-header">
+        <span class="eyebrow">On Campus</span>
+        <h2>Internal Restaurants</h2>
+        <p>Right inside the university grounds. Quick to reach between lectures.</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="vendors-grid">
+        {% for vendor in internal_vendors %}
+        <div class="vendor-card">
+            <span class="badge">On Campus</span>
+            <div class="vendor-image-frame">
+                <!-- Fallback or dynamic image naming based on vendor id/name -->
+                <!-- Temporary debug line -->
+                <img src="{{ url_for('static', filename='images/' + vendor.image_filename) }}" alt="{{ vendor.name }}">
             </div>
-
-            <div class="vendors-grid">
-                <div class="vendor-card">
-                    <span class="badge">On Campus</span>
-                    <div class="vendor-image-frame">
-                        <img src="{{ url_for('static', filename='images/pate.jpeg') }}" alt="Pate Cafeteria">
-                    </div>
-                    <div class="vendor-info">
-                        <div class="vendor-name">Pate Cafeteria</div>
-                        <p class="location"><b>LOCATION: </b>2nd Floor STC, straight from the stairs</p>
-                        <p class="cuisine"><b>GENRE: </b>Italian cuisine</p>
-                        <div class="menu">
-                            <a href="{{ url_for('student.pate')}}" class="login">Explore Menu</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="vendor-card">
-                    <span class="badge">On Campus</span>
-                    <div class="vendor-image-frame">
-                        <img src="{{ url_for('static', filename='images/upesi.jpeg') }}" alt="Upesi Joint">
-                    </div>
-                    <div class="vendor-info">
-                        <div class="vendor-name">UPESI joint</div>
-                        <p class="location"><b>LOCATION: </b>2nd Floor STC to the left from the stairs</p>
-                        <p class="cuisine"><b>GENRE: </b>Italian cuisine</p>
-                        <div class="menu">
-                            <a href="{{ url_for('student.upesi')}}" class="login">Explore Menu</a>
-                        </div>
-                    </div>
+            <div class="vendor-info">
+                <div class="vendor-name">{{ vendor.name }}</div>
+                <p class="location"><b>LOCATION: </b>{{ vendor.location_description }}</p>
+                <div class="menu">
+                    <a href="{{ url_for('student.view_vendor', vendor_id=vendor.id) }}" class="login">Explore Menu</a>
                 </div>
             </div>
-        </section>
+        </div>
+        {% endfor %}
+    </div>
+</section>
 
-        <!-- ================= EXTERNAL RESTAURANTS ================= -->
-        <section class="section external">
-            <div class="section-header">
-                <span class="eyebrow">Off Campus</span>
-                <h2>External Restaurants</h2>
-                <p>
-                    Local favourites just outside the campus gates. A short walk
-                    away for a change of scene and a different taste.
-                </p>
-                <div class="divider"></div>
-            </div>
+<!-- ================= EXTERNAL RESTAURANTS ================= -->
+<section class="section external">
+    <div class="section-header">
+        <span class="eyebrow">Off Campus</span>
+        <h2>External Restaurants</h2>
+        <p>Local favourites just outside the campus gates.</p>
+        <div class="divider"></div>
+    </div>
 
-            <div class="vendors-grid">
-                <div class="vendor-card">
-                    <span class="badge">Off Campus</span>
-                    <div class="vendor-image-frame">
-                        <img src="{{ url_for('static', filename='images/kireton.jpeg') }}" alt="Kireton Hotel">
-                    </div>
-                    <div class="vendor-info">
-                        <div class="vendor-name">Kireton</div>
-                        <p class="location"><b>LOCATION: </b>Siwaka, opposite Strathmore Gate A</p>
-                        <p class="cuisine"><b>GENRE: </b>Local casual dining </p>
-                        <div class="menu">
-                            <a href="{{ url_for('student.kerinton')}}" class="login">Explore Menu</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="vendor-card">
-                    <span class="badge">Off Campus</span>
-                    <div class="vendor-image-frame">
-                        <img src="{{ url_for('static', filename='images/georgie.jpeg') }}" alt="Georgie's Cafeteria">
-                    </div>
-                    <div class="vendor-info">
-                        <div class="vendor-name">Georgie</div>
-                        <p class="location"><b>LOCATION: </b>Siwaka, opposite Sleezy's</p>
-                        <p class="cuisine"><b>GENRE: </b>Standard local cuisine</p>
-                        <div class="menu">
-                            <a href="{{ url_for('student.georgie')}}" class="login">Explore menu</a>
-                        </div>
-                    </div>
+    <div class="vendors-grid">
+        {% for vendor in external_vendors %}
+        <div class="vendor-card">
+            <span class="badge">Off Campus</span>
+            <div class="vendor-image-frame">
+            <!-- Temporary debug line -->
+            <img src="{{ url_for('static', filename='images/' + vendor.image_filename) }}" alt="{{ vendor.name }}">
+</div>
+            <div class="vendor-info">
+                <div class="vendor-name">{{ vendor.name }}</div>
+                <p class="location"><b>LOCATION: </b>{{ vendor.location_description }}</p>
+                <div class="menu">
+                    <a href="{{ url_for('student.view_vendor', vendor_id=vendor.id) }}" class="login">Explore Menu</a>
                 </div>
             </div>
-        </section>
+        </div>
+        {% endfor %}
+    </div>
+</section>    
     </main>
 </body>
 

@@ -1,7 +1,8 @@
-CREATE DATABASE IF NOT EXISTS hunger_hunt;
-USE hunger_hunt;
+CREATE DATABASE IF NOT EXISTS Hunger;
+USE Hunger;
 
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS menu_items;
@@ -16,7 +17,7 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role ENUM('student', 'vendor') NOT NULL
+    role ENUM('student', 'vendor', 'admin') NOT NULL
 );
 
 CREATE TABLE students (
@@ -57,9 +58,10 @@ CREATE TABLE menu_items (
 -- 4. Orders & Payments
 CREATE TABLE orders (
     order_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
+    customer_id INT NULL,            -- NULL = the vendor ordered their own product
     vendor_id INT NOT NULL,
     food_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
     order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     total_amount DECIMAL(10, 2) NOT NULL,
     status ENUM('pending', 'processing', 'completed', 'cancelled') DEFAULT 'pending',
@@ -81,6 +83,17 @@ CREATE TABLE payments (
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     CONSTRAINT chk_payment_amount CHECK (amount >= 0)
 );
+CREATE TABLE notifications (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_id INT NULL,
+    message VARCHAR(255) NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE SET NULL
+);
+
 ALTER TABLE vendors ADD COLUMN balance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
 ALTER TABLE vendors ADD COLUMN revenue_goal DECIMAL(10, 2) NOT NULL DEFAULT 10000.00;
 -- 5. Starter Data & Inserts
@@ -91,7 +104,8 @@ INSERT INTO users (id, name, email, password_hash, role) VALUES
     (2, 'Pate', 'pate@test.com', @pw, 'vendor'),
     (3, 'Georgie', 'georgies@test.com', @pw, 'vendor'),
     (4, 'Kerinton', 'kerinton@test.com', @pw, 'vendor'),
-    (5, 'Upesi Joint', 'upesi@test.com', @pw, 'vendor');
+    (5, 'Upesi Joint', 'upesi@test.com', @pw, 'vendor'),
+    (6, 'Admin', 'admin@test.com', @pw, 'admin');
 
 INSERT INTO students (user_id) VALUES (1);
 

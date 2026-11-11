@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Hunger Hunt</title>
+    <style>
+        :root { --bg: antiquewhite; --muted: #666; --card: #f3e9da; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background-color: var(--bg); color: black; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 6%; border-bottom: 1px solid #ccc; }
+        .logo { font-size: 26px; font-weight: bold; color: rgba(0,0,0,0.813); }
+        .tagline { font-size: 14px; color: var(--muted); margin-top: 5px; }
+        .login { text-decoration: none; color: #333; font-weight: bold; padding: 10px 18px; border: 1px solid #333; border-radius: 8px; }
+        .login:hover { background-color: #333; color: #fff; }
+        main { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .note { background: var(--card); border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-left: 5px solid #ccc; }
+        .note.unread { border-left-color: #198754; }
+        .when { color: var(--muted); font-size: 13px; margin-top: 6px; }
+        .empty { color: var(--muted); }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <div class="logo">Hunger Hunt</div>
+            <div class="tagline">Notifications</div>
+        </div>
+        {% if session.get('role') == 'vendor' %}
+        <a href="{{ url_for('vendor.dashboard') }}" class="login">Back to Dashboard</a>
+        {% elif session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin.dashboard') }}" class="login">Back to Dashboard</a>
+        {% else %}
+        <a href="{{ url_for('student.landing') }}" class="login">Back to Home</a>
+        {% endif %}
+    </header>
+    <main>
+        <h1>Your notifications</h1>
+        {% for n in notifications %}
+        <div class="note {{ '' if n.is_read else 'unread' }}">
+            {{ n.message }}
+            <div class="when">{{ n.created_at.strftime('%d %b %Y, %H:%M') if n.created_at else '' }}</div>
+        </div>
+        {% else %}
+        <p class="empty">Nothing here yet.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

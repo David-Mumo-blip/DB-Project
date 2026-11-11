@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Product - Hunger Hunt</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="logo">Hunger Hunt</div>
+    <div class="header-buttons">
+      <a class="back-home" href="{{ url_for('vendor.dashboard') }}">Back to Dashboard</a>
+    </div>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <p class="message">{{ message }}</p>
+    {% endfor %}
+    {% endwith %}
+
+    <h1>{{ 'Edit ' + product.food_name if product else 'Add New Product' }}</h1>
+    <div class="section">
+      <form class="product-form"
+            action="{{ url_for('vendor.edit_product', id=product.id) if product else url_for('vendor.new_product') }}"
+            method="POST" enctype="multipart/form-data">
+
+        <label for="food_name">Food name</label>
+        <input type="text" id="food_name" name="food_name" maxlength="100" required
+               value="{{ product.food_name if product else '' }}">
+
+        <label for="price">Price (KSh)</label>
+        <input type="number" id="price" name="price" min="0" step="0.01" required
+               value="{{ product.price if product else '' }}">
+
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          {% for value, label in [('appetizer', 'Appetizer'), ('main_course', 'Main course'), ('dessert', 'Dessert'), ('beverage', 'Beverage')] %}
+          <option value="{{ value }}" {{ 'selected' if product and product.category == value else '' }}>{{ label }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="quantity_available">Stock quantity</label>
+        <input type="number" id="quantity_available" name="quantity_available" min="0" required
+               value="{{ product.quantity_available if product else 20 }}">
+
+        <label for="availability_status">Availability</label>
+        <select id="availability_status" name="availability_status">
+          <option value="available" {{ 'selected' if not product or product.availability_status == 'available' else '' }}>Available to students</option>
+          <option value="unavailable" {{ 'selected' if product and product.availability_status == 'unavailable' else '' }}>Hidden / unavailable</option>
+        </select>
+
+        <label for="image">Product photo</label>
+        {% if product %}
+        <img class="image-preview" src="{{ image_url(product.image_filename) }}" alt="Current photo">
+        <span class="hint">Choose a file only if you want to replace the current photo.</span>
+        {% endif %}
+        <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/gif,image/webp">
+        <span class="hint">PNG, JPG, GIF or WEBP, up to 5 MB.</span>
+
+        <div class="button-row" style="margin-top:14px">
+          <button type="submit" class="btn primary-btn">{{ 'Save Changes' if product else 'Add Product' }}</button>
+          <a href="{{ url_for('vendor.dashboard') }}" class="btn secondary-btn">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

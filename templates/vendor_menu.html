@@ -121,6 +121,7 @@
         </div>
         <div class="nav-links">
             <a href="{{ url_for('student.landing')}}" class="login">Back to Home</a>
+            <a href="{{ url_for('notifications.inbox') }}" class="login">🔔{% if notif_count %} {{ notif_count }}{% endif %}</a>
             <a href="{{ url_for('student.cart')}}" class="login">Cart</a>
         </div>
         <!-- Add this inside your header / navigation bar -->
@@ -133,6 +134,12 @@
     </header>
 
     <main>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div style="margin:10px 0;padding:10px 14px;border-radius:6px;background:{{ '#dcfce7' if category == 'success' else '#fee2e2' }};color:#222;">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
         <div class="vendor-banner">
             <!-- Dynamically displays whichever vendor's page was clicked -->
             <h1>{{ vendor.name }}</h1>
@@ -142,13 +149,17 @@
         <div id="menu" class="menu-grid">
             {% for item in products %}
             <div class="food-card">
-                <img src="{{ url_for('static', filename='images/' + item.image_filename) }}" alt="{{ item.food_name }}">
+                <img src="{{ image_url(item.image_filename) }}" alt="{{ item.food_name }}">
                 <div class="food-name">{{ item.food_name }}</div>
                 <div class="food-price">KSh {{ "{:,.2f}".format(item.price) }}</div>
                 <div class="stock-info">Available Stock: {{ item.quantity_available }}</div>
                 
                 <form action="{{ url_for('student.add_to_cart', item_id=item.id) }}" method="POST">
+                    {% if item.quantity_available > 0 and item.availability_status == 'available' %}
                     <button type="submit" class="add-btn">Add to Cart</button>
+                    {% else %}
+                    <button type="button" class="add-btn" disabled style="background:#999;cursor:not-allowed;">Out of Stock</button>
+                    {% endif %}
                 </form>
             </div>
             {% else %}

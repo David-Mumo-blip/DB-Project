@@ -58,6 +58,27 @@
             margin-left: 10px;
         }
 
+        header .login {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+
+        header .login:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .user-nav-section {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .nav-links a:hover {
             background-color: #333;
             color: #fff;
@@ -355,7 +376,9 @@ object-fit: contain means nothing is ever cropped. */
                     💳 Balance: KSh {{ "%.2f"|format(student_balance) }}
                 </div>
             {% endif %}
-            <!-- Other nav links (Cart, Logout, etc.) -->
+            <a href="{{ url_for('notifications.inbox') }}" class="login">🔔{% if notif_count %} {{ notif_count }}{% endif %}</a>
+            <a href="{{ url_for('student.cart') }}" class="login">Cart 🛒</a>
+            <form action="{{ url_for('auth.logout') }}" method="POST" style="display:inline"><button type="submit" class="login" style="background:none;cursor:pointer;font-size:14px;">Logout</button></form>
         </div>
     </header>
 
@@ -381,7 +404,7 @@ object-fit: contain means nothing is ever cropped. */
             <div class="vendor-image-frame">
                 <!-- Fallback or dynamic image naming based on vendor id/name -->
                 <!-- Temporary debug line -->
-                <img src="{{ url_for('static', filename='images/' + vendor.image_filename) }}" alt="{{ vendor.name }}">
+                <img src="{{ image_url(vendor.image_filename) }}" alt="{{ vendor.name }}">
             </div>
             <div class="vendor-info">
                 <div class="vendor-name">{{ vendor.name }}</div>
@@ -410,7 +433,7 @@ object-fit: contain means nothing is ever cropped. */
             <span class="badge">Off Campus</span>
             <div class="vendor-image-frame">
             <!-- Temporary debug line -->
-            <img src="{{ url_for('static', filename='images/' + vendor.image_filename) }}" alt="{{ vendor.name }}">
+            <img src="{{ image_url(vendor.image_filename) }}" alt="{{ vendor.name }}">
 </div>
             <div class="vendor-info">
                 <div class="vendor-name">{{ vendor.name }}</div>

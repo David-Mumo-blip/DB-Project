@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
 from routes.passwords import hash_password, verify_password
 from functools import wraps
+from decimal import Decimal, InvalidOperation
+from routes.uploads import save_image, delete_image
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 from db import get_db
@@ -47,6 +49,7 @@ def register():
     vendor_name = request.form.get('vendor_name', '').strip()
     location_description = request.form.get('location_description', '').strip()
     campus_status = request.form.get('campus_status', '').strip()
+    goal_raw = request.form.get('revenue_goal', '').strip()
 
     # 2. Validation Constraints
     if not name or not email or not password or not confirm:
@@ -65,8 +68,26 @@ def register():
         flash('Please provide a vendor name and valid campus status.', 'error')
         return render_template('register.html', role=role), 400
 
+    revenue_goal = Decimal('10000.00')
+    image_filename = 'default_vendor.jpeg'
+    if role == 'vendor':
+        if goal_raw:
+            try:
+                revenue_goal = Decimal(goal_raw)
+                if revenue_goal <= 0:
+                    raise InvalidOperation
+            except InvalidOperation:
+                flash('Revenue goal must be a number greater than 0.', 'error')
+                return render_template('register.html', role=role), 400
+        try:
+            image_filename = save_image(request.files.get('image')) or image_filename
+        except ValueError as e:
+            flash(str(e), 'error')
+            return render_template('register.html', role=role), 400
+
     # 3. Heavy/Unsafe computations executed outside of DB transactions
     hashed_password = hash_password(password)
+    committed = False
 
     db = get_db()
     cursor = db.cursor()
@@ -88,13 +109,16 @@ def register():
         else:
             cursor.execute(
                 """
-                INSERT INTO vendors (user_id, name, location_description, campus_status, approval_status) 
-                VALUES (%s, %s, %s, %s, 'pending')
+                INSERT INTO vendors (user_id, name, location_description, campus_status, approval_status,
+                                     image_filename, balance, revenue_goal) 
+                VALUES (%s, %s, %s, %s, 'pending', %s, 0, %s)
                 """,
-                (user_id, vendor_name, location_description or None, campus_status)
+                (user_id, vendor_name, location_description or None, campus_status,
+                 image_filename, revenue_goal)
             )
         
         db.commit()
+        committed = True
 
     except mysql.connector.IntegrityError as err:
         db.rollback()
@@ -112,6 +136,9 @@ def register():
         
     finally:
         cursor.close()
+        db.close()
+        if not committed and image_filename != 'default_vendor.jpeg':
+            delete_image(image_filename)
 
     if role == 'student':
         flash('Account created! Please log in.', 'success')
@@ -171,6 +198,10 @@ def login():
                 flash("Your vendor profile is unavailable.", 'error')
                 return render_template('login.html'), 403
 
+            if vendor['approval_status'] == 'rejected':
+                flash("Your vendor application was not approved.", 'error')
+                return render_template('login.html'), 403
+
             if vendor['approval_status'] != 'approved':
                 flash("Your vendor application is still under review.", 'error')
                 return render_template('login.html'), 403
@@ -181,6 +212,9 @@ def login():
         session['user_id'] = user['id']
         session['name'] = user['name']
         session['role'] = user['role']
+
+        if user['role'] == 'admin':
+            return redirect(url_for('admin.dashboard'))
 
         if vendor_id is not None:
             session['vendor_id'] = vendor_id
@@ -196,6 +230,7 @@ def login():
 
     finally:
         cursor.close()
+        db.close()
 
 
 @auth_bp.route('/logout', methods=['POST'])

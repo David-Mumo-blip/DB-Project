@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders - Hunger Hunt</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>
+    <div class="logo">Hunger Hunt</div>
+    <div class="header-buttons">
+      <a href="{{ url_for('notifications.inbox') }}" class="btn secondary-btn">🔔{% if notif_count %} {{ notif_count }}{% endif %}</a>
+      <a class="back-home" href="{{ url_for('vendor.dashboard') }}">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <p class="message {{ category }}">{{ message }}</p>
+    {% endfor %}
+    {% endwith %}
+
+    <h1>Orders Received</h1>
+    <p class="description">Orders waiting to be prepared. Marking one as ready tells the student and adds the money to your balance.</p>
+
+    <div class="section">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Order No</th><th>Placed</th><th>Customer</th><th>Food</th><th>Qty</th><th>Total</th><th class="text-right">Action</th></tr>
+          </thead>
+          <tbody>
+            {% for o in orders %}
+            <tr>
+              <td>#{{ o.order_id }}</td>
+              <td>{{ o.order_date.strftime('%d %b, %H:%M') }}</td>
+              <td>{{ o.customer_name if o.customer_id else 'You (own order)' }}</td>
+              <td>{{ o.food_name }}</td>
+              <td>{{ o.quantity }}</td>
+              <td>{% if o.customer_id %}KSh {{ "%.2f"|format(o.total_amount) }}{% else %}&mdash;{% endif %}</td>
+              <td class="text-right">
+                <form action="{{ url_for('vendor.ready_order', order_id=o.order_id) }}" method="POST">
+                  <button type="submit" class="btn primary-btn sm-btn">Mark Ready</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="empty-note">No orders waiting.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Order your own product</h2>
+      <p class="description">No payment needed. It stays on this page until you mark it ready, and it takes the item out of stock.</p>
+      <form action="{{ url_for('vendor.own_order') }}" method="POST" class="goal-input-group">
+        <select name="food_id" required>
+          {% for p in products %}
+          <option value="{{ p.id }}">{{ p.food_name }} ({{ p.quantity_available }} in stock)</option>
+          {% endfor %}
+        </select>
+        <input type="number" name="quantity" value="1" min="1" required style="max-width:100px">
+        <button type="submit" class="btn secondary-btn sm-btn" {% if not products %}disabled{% endif %}>Place Order</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

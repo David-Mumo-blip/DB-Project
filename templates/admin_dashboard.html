@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Hunger Hunt</title>
+    <style>
+        :root { --bg: antiquewhite; --green: #198754; --green-dark: #157347; --muted: #666; --card: #f3e9da; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background-color: var(--bg); color: black; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 6%; border-bottom: 1px solid #ccc; }
+        .logo { font-size: 26px; font-weight: bold; color: rgba(0,0,0,0.813); }
+        .tagline { font-size: 14px; color: var(--muted); margin-top: 5px; }
+        .login { text-decoration: none; color: #333; font-weight: bold; padding: 10px 18px; border: 1px solid #333; border-radius: 8px; background: none; cursor: pointer; font-size: 14px; }
+        .login:hover { background-color: #333; color: #fff; }
+        main { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 34px; margin: 0 0 8px; }
+        h2 { margin-top: 40px; }
+        .sub { color: var(--muted); margin-bottom: 20px; }
+        .card { background: var(--card); border-radius: 12px; padding: 18px 22px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .card strong { font-size: 18px; }
+        .meta { color: var(--muted); font-size: 14px; margin-top: 4px; }
+        .actions { display: flex; gap: 10px; align-items: center; }
+        .approve { background: var(--green); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .approve:hover { background: var(--green-dark); }
+        .reject { background: none; color: #b02a37; border: 1px solid #b02a37; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .reject:hover { background: #b02a37; color: #fff; }
+        .pill { padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: bold; }
+        .pill.approved { background: #d1e7dd; color: #0f5132; }
+        .pill.rejected { background: #f8d7da; color: #842029; }
+        .flash { margin: 10px 0; padding: 10px 14px; border-radius: 6px; }
+        .flash.success { background: #dcfce7; }
+        .flash.error { background: #fee2e2; }
+        .empty { color: var(--muted); padding: 20px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <div class="logo">Hunger Hunt</div>
+            <div class="tagline">Admin Dashboard</div>
+        </div>
+        <form action="{{ url_for('auth.logout') }}" method="POST"><button type="submit" class="login">Logout</button></form>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}
+        {% endwith %}
+
+        <h1>Vendor Applications</h1>
+        <p class="sub">Approving a vendor lets them log in and puts them on the student page.</p>
+
+        {% for v in pending %}
+        <div class="card">
+            <div>
+                <strong>{{ v.name }}</strong>
+                <div class="meta">{{ v.campus_status }}{% if v.location_description %} · {{ v.location_description }}{% endif %}</div>
+                <div class="meta">Applicant: {{ v.owner_name }} ({{ v.email }})</div>
+            </div>
+            <div class="actions">
+                <form action="{{ url_for('admin.decide', vendor_id=v.id, decision='approve') }}" method="POST"><button class="approve" type="submit">Approve</button></form>
+                <form action="{{ url_for('admin.decide', vendor_id=v.id, decision='reject') }}" method="POST"><button class="reject" type="submit">Reject</button></form>
+            </div>
+        </div>
+        {% else %}
+        <p class="empty">No pending applications.</p>
+        {% endfor %}
+
+        <h2>Reviewed Vendors</h2>
+        {% for v in reviewed %}
+        <div class="card">
+            <div>
+                <strong>{{ v.name }}</strong>
+                <div class="meta">{{ v.campus_status }}{% if v.location_description %} · {{ v.location_description }}{% endif %}</div>
+            </div>
+            <div class="actions">
+                <span class="pill {{ v.approval_status }}">{{ v.approval_status }}</span>
+                {% if v.approval_status == 'approved' %}
+                <form action="{{ url_for('admin.decide', vendor_id=v.id, decision='reject') }}" method="POST"><button class="reject" type="submit">Revoke</button></form>
+                {% else %}
+                <form action="{{ url_for('admin.decide', vendor_id=v.id, decision='approve') }}" method="POST"><button class="approve" type="submit">Approve</button></form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+</body>
+</html>

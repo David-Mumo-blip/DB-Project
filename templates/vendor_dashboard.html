@@ -14,13 +14,20 @@
     <div class="logo">Hunger Hunt</div>
     <div class="header-buttons">
       <!-- FLASK ROUTING -->
-      <a href="{{ url_for('vendor.orders') }}" class="btn secondary-btn">Orders</a>
+      <a href="{{ url_for('vendor.orders') }}" class="btn secondary-btn">Orders{% if pending_orders %} ({{ pending_orders }}){% endif %}</a>
+      <a href="{{ url_for('notifications.inbox') }}" class="btn secondary-btn">🔔{% if notif_count %} {{ notif_count }}{% endif %}</a>
       <a class="back-home" href="{{ url_for('auth.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
       <form id="logout-form" action="{{ url_for('auth.logout') }}" method="POST" style="display: none;"></form>
     </div>
   </header>
 
   <main>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div style="margin:10px 0;padding:10px 14px;border-radius:6px;background:{{ '#dcfce7' if category == 'success' else '#fee2e2' }};color:#222;">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
 
     <div class="dashboard-header">
       <h1>{{ vendor.name }} Dashboard</h1>
@@ -65,6 +72,15 @@
       </div>
     </section>
 
+    <!-- GOAL PROGRESS BAR -->
+    <section class="section">
+      <div class="section-title"><h2>Goal Progress</h2></div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}">
+        <div class="progress-fill" style="width: {{ percent }}%;"></div>
+      </div>
+      <p class="sub-text">KSh {{ "%.2f"|format(revenue) }} earned of your KSh {{ "%.2f"|format(goal) }} goal ({{ percent }}%). Earnings count once you mark an order as ready.</p>
+    </section>
+
     <!-- STOCK / PRODUCT MANAGEMENT SECTION -->
     <section class="section">
       <div class="section-header">
@@ -94,14 +110,20 @@
               <tr>
                 <td>
                   <div class="product-cell">
-                    <span class="product-name">{{ item.food_name }}</span>
+                    <img class="product-thumb" src="{{ image_url(item.image_filename) }}" alt="{{ item.food_name }}">
+                    <div>
+                      <span class="product-name">{{ item.food_name }}</span>
+                      {% if not has_image(item.image_filename) %}<span class="no-photo">No photo yet</span>{% endif %}
+                    </div>
                   </div>
                 </td>
                 <td><code class="item-id">#{{ item.id }}</code></td>
                 <td>{{ item.category }}</td>
                 <td class="price">KSh {{ item.price }}</td>
                 <td>
-                  {% if item.quantity_available > 10 %}
+                  {% if item.availability_status == 'unavailable' %}
+                    <span class="badge badge-danger">Hidden</span>
+                  {% elif item.quantity_available > 10 %}
                     <span class="badge badge-success">In Stock</span>
                   {% elif item.quantity_available > 0 %}
                     <span class="badge badge-warning">Low Stock</span>
@@ -112,12 +134,12 @@
                 <td><strong>{{ item.quantity_available }}</strong> units</td>
                 <td class="text-right">
                   <div class="action-buttons">
-                    <form action="{{ url_for('vendor.update_stock', id=item.id, action='add') }}" method="POST">
-                      <button type="submit" class="btn icon-btn" title="Add Stock">+</button>
+                    <form method="POST" class="stock-form">
+                      <input type="number" name="amount" value="1" min="1" max="10000" title="How many units" aria-label="Units to add or remove">
+                      <button type="submit" formaction="{{ url_for('vendor.update_stock', id=item.id, action='add') }}" class="btn icon-btn" title="Add stock">+</button>
+                      <button type="submit" formaction="{{ url_for('vendor.update_stock', id=item.id, action='reduce') }}" class="btn icon-btn" title="Remove stock">-</button>
                     </form>
-                    <form action="{{ url_for('vendor.update_stock', id=item.id, action='reduce') }}" method="POST">
-                      <button type="submit" class="btn icon-btn" title="Reduce Stock">-</button>
-                    </form>
+                    <a href="{{ url_for('vendor.edit_product', id=item.id) }}" class="btn secondary-btn sm-btn">Edit</a>
                     <form action="{{ url_for('vendor.delete_product', id=item.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this product?');">
                       <button type="submit" class="btn danger-btn sm-btn" title="Remove Product">Remove</button>
                     </form>

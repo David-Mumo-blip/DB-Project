@@ -14,15 +14,12 @@ def dashboard():
     cursor = db.cursor(dictionary=True)
     
     try:
-        # Fetch vendor details including their wallet balance
         cursor.execute("SELECT * FROM vendors WHERE id = %s", (vendor_id,))
         vendor = cursor.fetchone()
         
-        # Fetch inventory
         cursor.execute("SELECT * FROM menu_items WHERE vendor_id = %s", (vendor_id,))
         products = cursor.fetchall()
         
-        # Calculate total historical revenue from completed payments
         cursor.execute(
             """
             SELECT COALESCE(SUM(p.amount), 0) AS total_revenue
@@ -35,7 +32,7 @@ def dashboard():
         rev_data = cursor.fetchone()
         revenue = rev_data['total_revenue'] if rev_data else 0
 
-        goal = 10000  # Target goal placeholder
+        goal = float(vendor['revenue_goal']) if vendor.get('revenue_goal') else 10000.0
         percent = min(int((revenue / goal) * 100), 100) if goal > 0 else 0
         
         return render_template(
@@ -50,6 +47,37 @@ def dashboard():
     finally:
         cursor.close()
         db.close()
+
+
+@vendor_bp.route('/goal/set', methods=['POST'])
+def set_goal():
+    if 'user_id' not in session or session.get('role') != 'vendor':
+        abort(403)
+
+    vendor_id = session.get('vendor_id')
+    new_goal = request.form.get('goal')
+
+    if not new_goal:
+        flash('Please enter a valid goal amount.', 'error')
+        return redirect(url_for('vendor.dashboard'))
+
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        cursor.execute(
+            "UPDATE vendors SET revenue_goal = %s WHERE id = %s",
+            (new_goal, vendor_id)
+        )
+        db.commit()
+        flash('Revenue goal updated successfully!', 'success')
+    except Exception as e:
+        db.rollback()
+        flash(f'Error updating goal: {str(e)}', 'error')
+    finally:
+        cursor.close()
+        db.close()
+
+    return redirect(url_for('vendor.dashboard'))
 
 @vendor_bp.route('/orders')
 def orders():
@@ -161,10 +189,3 @@ def delete_product(id):
     finally:
         cursor.close()
         db.close()
-
-
-@vendor_bp.route('/goal/set', methods=['POST'])
-def set_goal():
-    # Placeholder if you want to store revenue goals in session or database later
-    flash('Goal updated successfully!', 'success')
-    return redirect(url_for('vendor.dashboard'))

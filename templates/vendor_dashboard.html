@@ -53,7 +53,30 @@
           <span class="kpi-label">Goal Progress</span>
           <div class="kpi-value"><span id="percent">{{ percent | default(0) }}</span>%</div>
         </div>
+        <div class="kpi-grid">
+    <!-- Vendor Wallet Balance -->
+    <div class="kpi-card">
+        <span class="kpi-label">Available Balance</span>
+        <div class="kpi-value">KSh <span id="vendorBalance">{{ "%.2f"|format(vendor_balance | default(0)) }}</span></div>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">Total Revenue</span>
+        <div class="kpi-value">KSh <span id="revenue">{{ "%.2f"|format(revenue | default(0)) }}</span></div>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">Revenue Goal</span>
+        <div class="kpi-value">KSh <span id="goal">{{ goal | default(0) }}</span></div>
+        
+        <form action="{{ url_for('vendor.set_goal') }}" method="POST" class="goal-input-group">
+            <input type="number" name="goal" id="goalInput" placeholder="Set target goal" required>
+            <button type="submit" class="btn secondary-btn sm-btn">Set Goal</button>
+        </form>
+    </div>
+</div>
       </div>
+
     </section>
 
     <!-- STOCK / PRODUCT MANAGEMENT SECTION -->

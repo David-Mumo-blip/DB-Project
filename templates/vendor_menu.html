@@ -123,6 +123,13 @@
             <a href="{{ url_for('student.landing')}}" class="login">Back to Home</a>
             <a href="{{ url_for('student.cart')}}" class="login">Cart</a>
         </div>
+        <!-- Add this inside your header / navigation bar -->
+        {% if student_balance is not none %}
+        <div class="wallet-badge" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f1f5f9; border-radius: 6px; font-weight: 600;">
+            <span>💳</span>
+            <span>KSh {{ "%.2f"|format(student_balance) }}</span>
+        </div>
+        {% endif %}
     </header>
 
     <main>

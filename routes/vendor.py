@@ -14,17 +14,42 @@ def dashboard():
     cursor = db.cursor(dictionary=True)
     
     try:
+        # Fetch vendor details including their wallet balance
         cursor.execute("SELECT * FROM vendors WHERE id = %s", (vendor_id,))
         vendor = cursor.fetchone()
         
+        # Fetch inventory
         cursor.execute("SELECT * FROM menu_items WHERE vendor_id = %s", (vendor_id,))
         products = cursor.fetchall()
         
-        return render_template('vendor_dashboard.html', vendor=vendor, products=products)
+        # Calculate total historical revenue from completed payments
+        cursor.execute(
+            """
+            SELECT COALESCE(SUM(p.amount), 0) AS total_revenue
+            FROM payments p
+            JOIN orders o ON p.order_id = o.order_id
+            WHERE o.vendor_id = %s AND p.payment_status = 'completed'
+            """,
+            (vendor_id,)
+        )
+        rev_data = cursor.fetchone()
+        revenue = rev_data['total_revenue'] if rev_data else 0
+
+        goal = 10000  # Target goal placeholder
+        percent = min(int((revenue / goal) * 100), 100) if goal > 0 else 0
+        
+        return render_template(
+            'vendor_dashboard.html', 
+            vendor=vendor, 
+            products=products, 
+            revenue=revenue,
+            vendor_balance=vendor['balance'],
+            goal=goal,
+            percent=percent
+        )
     finally:
         cursor.close()
         db.close()
-
 
 @vendor_bp.route('/orders')
 def orders():

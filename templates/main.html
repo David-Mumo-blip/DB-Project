@@ -348,6 +348,15 @@ object-fit: contain means nothing is ever cropped. */
             <a href="{{url_for ('student.cart')}}">Cart 🛒</a> -->
 
         </div>
+        <!-- Inside your header or navigation bar -->
+        <div class="user-nav-section">
+            {% if student_balance is not none %}
+                <div class="wallet-badge" style="background-color: #f0f4f8; padding: 8px 12px; border-radius: 8px; font-weight: bold;">
+                    💳 Balance: KSh {{ "%.2f"|format(student_balance) }}
+                </div>
+            {% endif %}
+            <!-- Other nav links (Cart, Logout, etc.) -->
+        </div>
     </header>
 
     <main>

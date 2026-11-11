@@ -191,17 +191,24 @@ def checkout():
             return redirect(url_for('student.cart'))
 
         # Deduct balance
+# Deduct balance from student
         new_balance = balance - total_amount
         cursor.execute("UPDATE students SET balance = %s WHERE student_id = %s", (new_balance, student_id))
 
-        # Insert orders and payments for each cart item
+        # Track items per vendor to credit their balances correctly
+        vendor_totals = {}
+
         for item in cart.values():
+            v_id = item['vendor_id']
+            item_total = item['price'] * item['quantity']
+            vendor_totals[v_id] = vendor_totals.get(v_id, 0) + item_total
+
             cursor.execute(
                 """
                 INSERT INTO orders (customer_id, vendor_id, food_id, total_amount, status)
                 VALUES (%s, %s, %s, %s, 'pending')
                 """,
-                (student_id, item['vendor_id'], item['id'], item['price'] * item['quantity'])
+                (student_id, v_id, item['id'], item_total)
             )
             order_id = cursor.lastrowid
 
@@ -210,7 +217,18 @@ def checkout():
                 INSERT INTO payments (order_id, amount, payment_method, payment_status)
                 VALUES (%s, %s, 'wallet', 'completed')
                 """,
-                (order_id, item['price'] * item['quantity'])
+                (order_id, item_total)
+            )
+
+        # Credit each vendor's balance with their respective order totals
+        for v_id, total_earned in vendor_totals.items():
+            cursor.execute(
+                """
+                UPDATE vendors 
+                SET balance = balance + %s 
+                WHERE id = %s
+                """,
+                (total_earned, v_id)
             )
 
         db.commit()

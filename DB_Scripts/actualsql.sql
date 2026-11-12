@@ -36,6 +36,8 @@ CREATE TABLE vendors (
     campus_status ENUM('on-campus', 'off-campus') NOT NULL,
     approval_status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'approved',
     image_filename VARCHAR(255) NOT NULL DEFAULT 'default_vendor.jpeg',
+    balance DECIMAL(10, 2) NOT NULL DEFAULT 0.0,
+    revenue_goal DECIMAL(10, 2) NOT NULL DEFAULT 10000.00,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -94,8 +96,6 @@ CREATE TABLE notifications (
     FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE SET NULL
 );
 
-ALTER TABLE vendors ADD COLUMN balance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
-ALTER TABLE vendors ADD COLUMN revenue_goal DECIMAL(10, 2) NOT NULL DEFAULT 10000.00;
 -- 5. Starter Data & Inserts
 SET @pw = 'scrypt:32768:8:1$KZuhywpFzVPf9lvL$eb3723ba14f7d58bdf8b36b7bbd0844be3143f0daa0358be992a32c7bbe66a98196819d0c33f1aa7c6c4e9c9a9e99e446671f12ded5cff63b483abca85c0e4c9';
 
@@ -106,6 +106,11 @@ INSERT INTO users (id, name, email, password_hash, role) VALUES
     (4, 'Kerinton', 'kerinton@test.com', @pw, 'vendor'),
     (5, 'Upesi Joint', 'upesi@test.com', @pw, 'vendor'),
     (6, 'Admin', 'admin@test.com', @pw, 'admin');
+
+INSERT INTO users (name, email, password_hash, role)
+SELECT 'Admin', 'admin@test.com', password_hash, 'admin'
+FROM users WHERE email = 'student@test.com'
+AND NOT EXISTS (SELECT 1 FROM users WHERE email = 'admin@test.com');
 
 INSERT INTO students (user_id) VALUES (1);
 

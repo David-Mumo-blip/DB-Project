@@ -218,9 +218,9 @@ def checkout():
 
         for row, qty, line_total in lines:
             cursor.execute(
-                "INSERT INTO orders (customer_id, vendor_id, food_id, quantity, total_amount, status) "
-                "VALUES (%s, %s, %s, %s, %s, 'pending')",
-                (student_id, row['vendor_id'], row['id'], qty, line_total)
+                "INSERT INTO orders (customer_id, vendor_id, food_id, food_name, quantity, total_amount, status) "
+                "VALUES (%s, %s, %s, %s, %s, %s, 'pending')",
+                (student_id, row['vendor_id'], row['id'], row['food_name'], qty, line_total)
             )
             order_id = cursor.lastrowid
             cursor.execute(

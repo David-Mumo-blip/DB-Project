@@ -60,6 +60,7 @@ CREATE TABLE menu_items (
 -- 4. Orders & Payments
 CREATE TABLE orders (
     order_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    food_name VARCHAR(100) NOT NULL,
     customer_id INT NULL,            -- NULL = the vendor ordered their own product
     vendor_id INT NOT NULL,
     food_id INT NOT NULL,
@@ -70,7 +71,6 @@ CREATE TABLE orders (
     
     FOREIGN KEY (customer_id) REFERENCES students(student_id) ON DELETE CASCADE,
     FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE,
-    FOREIGN KEY (food_id) REFERENCES menu_items(id) ON DELETE CASCADE,
     CONSTRAINT chk_total_amount CHECK (total_amount >= 0)
 );
 

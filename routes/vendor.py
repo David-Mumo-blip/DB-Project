@@ -171,9 +171,9 @@ def own_order():
             (quantity, food_id)
         )
         cursor.execute(
-            "INSERT INTO orders (customer_id, vendor_id, food_id, quantity, total_amount, status) "
-            "VALUES (NULL, %s, %s, %s, %s, 'pending')",
-            (vendor_id, food_id, quantity, item['price'] * quantity)
+            "INSERT INTO orders (customer_id, vendor_id, food_id, food_name, quantity, total_amount, status) "
+            "VALUES (NULL, %s, %s, %s, %s, %s, 'pending')",
+            (vendor_id, food_id, item['food_name'], quantity, item['price'] * quantity)
         )
         db.commit()
         flash(f"Order placed: {quantity} x {item['food_name']}.", 'success')
